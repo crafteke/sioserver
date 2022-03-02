@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <title>FACE6 Control center</title>
+    <meta name="description" content="This is a theme in CSS3 to simulate the interfaxes of the game CyberPunk 2077.">
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@200;300;500;600;700&display=swap" rel="stylesheet">
+    <link href="/cyberpunk-2077.css" rel="stylesheet">
+    <script src="/jquery-3.6.0.min.js"></script>
+    <script src="/jquery.knob.min.js"></script>
+    <script src="/script.js"></script>
+  </head>
+  <body>
+    <!-- <header style="background-color: #000; height: 50px;"><a href="https://github.com/gwannon/Cyberpunk-2077-theme-css" style="color: #f9f002; font-size: 2rem;">Github</a></header> -->
+    <section class="cyberpunk">
+      <a class="cyberpunk2077 level_selector" id="first_level" data-level="lift">Lift</a>
+      <a class="cyberpunk2077 green level_selector" data-level="hal">Hal</a>
+      <a class="cyberpunk2077 purple level_selector" data-level="corridor">Corridor</a>
+      <a class="cyberpunk2077 blue level_selector" data-level="room_01">room 01</a>
+      <a class="cyberpunk2077 blue level_selector" data-level="room_02">room 02</a>
+      <a class="cyberpunk2077 blue level_selector" data-level="room_03">room 03</a>
+
+    </section>
+    <section class="cyberpunk black">
+      <h1 class="cyberpunk glitched">Commands</h1>
+    </section>
+    <section class="cyberpunk">
+      <div id="command_forms" class="box">
+        <!-- here come the insert of commands -->
+      </div>
+    </section>
+    <section class="cyberpunk black">
+        <p class="cyberpunk scannedv inverse dotted">
+          LOGS : <br>
+          <br>
+          <span id="logs_content" style="min-height: 300px">
+          </span>
+        </p>
+    </section>
+  </body>
+</html>

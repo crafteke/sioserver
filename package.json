@@ -1,0 +1,21 @@
+{
+  "name": "dashboard",
+  "version": "1.0.0",
+  "description": "FACE6 dashboard",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/oxykube/dashboard.git"
+  },
+  "dependencies": {
+    "express": "4.17.3",
+    "socket.io": "3.1.1",
+    "socket.io-client": "^4.4.1"
+  },
+  "author": "hachpai",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/oxykube/dashboard#readme"
+}

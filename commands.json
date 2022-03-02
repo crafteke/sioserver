@@ -1,0 +1,8 @@
+{
+    "lift":{"lift_button_up":{"released":0, "pushed":1},"lift_button_down":{"released":0, "pushed":1}},
+    "hal":{"hal_circuit_0":{"unplugged":0, "good":1,"wrong":-1},"hal_circuit_1":{"unplugged":0, "good":1,"wrong":-1},"hal_circuit_2":{"unplugged":0, "good":1,"wrong":-1},"hal_circuit_3":{"unplugged":0, "good":1,"wrong":-1},"hal_button":{"released":0, "pushed":1}},
+    "corridor":{"push_pad":{"good":"0101101","wrong":"0111101"}},
+    "room_01":{"r0_knob_0":{"left":-1,"right":1},"r0_button_0":{"released":0, "pushed":1},"r0_plug_0":{"released":0, "plugged":1}},
+    "room_02":{"rfid_validation_button":{"released":0, "pushed":1},"rfid_0":{"removed":0,"present":1},"rfid_1":{"removed":0,"present":1},"rfid_2":{"removed":0,"present":1},"rfid_3":{"removed":0,"present":1},"rfid_4":{"removed":0,"present":1},"rfid_5":{"removed":0,"present":1}},
+    "room_03":{"cube_plugged":{"0":0,"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9,"10":10},"path_1":{"open":0, "closed":1},"path_2":{"open":0, "closed":1},"path_3":{"open":0, "closed":1}}
+}
