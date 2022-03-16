@@ -1,5 +1,6 @@
 .box {
   display: flex;
+      flex-wrap: wrap;
 }
 .box form{
   padding: 5px;
@@ -1224,3 +1225,20 @@ aside.cyberpunk ul li:hover a {
 aside.cyberpunk a:after {
   display: none;
 }
+table{
+    display:inline-table
+}
+table, td{
+     border: 1px solid;
+    
+    color: yellow;
+     
+     border-collapse: collapse;
+   
+}
+td{
+   width: 5em;
+height: 5em;
+    padding: 1em;
+}
+

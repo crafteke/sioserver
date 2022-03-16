@@ -2,11 +2,14 @@ $(document).ready(function () {
 
    $("a.level_selector").click(function (event) {
      console.log("value:",$(this).data('level'))
+       
+       
       $.post("/select_level",
          {
             level: $(this).data('level')
+          
          },
-         function (data, status) {
+         function (data, status) {          
             console.log(data.commands);
             $("#command_forms").html('')
             html_content=''
