@@ -2,14 +2,19 @@ $(document).ready(function () {
 
    $("a.level_selector").click(function (event) {
      console.log("value:",$(this).data('level'))
-       
-       
+       if($(this).data('level')=='room_01'){
+         $('#control_maps').show(500)
+       }
+       else{
+         $('#control_maps').hide(500)
+       }
+
       $.post("/select_level",
          {
             level: $(this).data('level')
-          
+
          },
-         function (data, status) {          
+         function (data, status) {
             console.log(data.commands);
             $("#command_forms").html('')
             html_content=''

@@ -7,6 +7,10 @@
 
 }
 
+#control_maps{
+  
+}
+
 select.button option{
   /* display:none; */
 }
@@ -1230,15 +1234,14 @@ table{
 }
 table, td{
      border: 1px solid;
-    
+
     color: yellow;
-     
+
      border-collapse: collapse;
-   
+
 }
 td{
    width: 5em;
 height: 5em;
     padding: 1em;
 }
-
