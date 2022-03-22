@@ -10,8 +10,7 @@
     <script src="/jquery.knob.min.js"></script>
     <script src="/script.js"></script>
   </head>
-  <body>
-    <!-- <header style="background-color: #000; height: 50px;"><a href="https://github.com/gwannon/Cyberpunk-2077-theme-css" style="color: #f9f002; font-size: 2rem;">Github</a></header> -->
+  <body ontouchmove>
     <section class="cyberpunk">
       <a class="cyberpunk2077 level_selector" id="first_level" data-level="lift">Lift</a>
       <a class="cyberpunk2077 green level_selector" data-level="hal">Hal</a>
@@ -106,5 +105,20 @@
           </span>
         </p>
     </section>
+    <section class="cyberpunk black">
+        <p class="cyberpunk scannedv inverse dotted">
+          Remote LOGS : <br>
+          <br>
+          <span id="logs_content_remote" style="min-height: 300px">
+          </span>
+        </p>
+    </section>
+    <aside class="cyberpunk">
+      <ul>
+        <li><input id="timer_value"></input><span style="color:white;">&#x23F3;&#xfe0e;</span></li>
+        <li><a id="start_counter" href="#">&#x25b7; start/reset</a></li>
+        <li><a id="pause_counter" href="#">&#x25A0; pause</a></li>
+      </ul>
+    </aside>
   </body>
 </html>

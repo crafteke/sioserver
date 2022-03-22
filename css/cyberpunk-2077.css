@@ -8,7 +8,11 @@
 }
 
 #control_maps{
-  
+
+}
+span.timer {
+ background-color:#18171b;
+ color:#b4bcc1
 }
 
 select.button option{

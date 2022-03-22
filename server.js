@@ -20,6 +20,9 @@ app.post("/select_level", (req, res) => {
       commands: commands[req.body.level]
    })
 })
+app.get('/logs',(req,res)=>{
+  res.json({logs_content:logs})
+})
 app.post("/send_command", (req, res) => {
   console.log("Sending command:",req.body);
     io.emit("Command",req.body);
@@ -33,6 +36,7 @@ const port = 3000;
 server.listen(port);console.debug('Server listening on port ' + port);
 
 const commands= require('./commands.json')
+var logs=""
 /*--------SOCKET IO Server ----------*/
 var io = require('socket.io')({});
 
@@ -61,7 +65,9 @@ io.on('connection',  function (socket) {
   }
 )
   socket.on("Command", (data) => {
-		  console.log("Command from:"+clientName+", id:"+data.controller_id+", value:"+data.action);
+      log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
+		  console.log(log)
+      logs = logs+log+'\n'
       io.emit("Command",data)
       //socket.emit("beboop",json_message);
 	});

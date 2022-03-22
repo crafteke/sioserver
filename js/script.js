@@ -1,5 +1,35 @@
+function getlogs(){
+  $.getJSON("/logs", function (data){
+     $("#logs_content_remote").html("> "+data[0].logs_content.split('\n').join("</br> > "));
+     console.log(data)
+  })
+}
 $(document).ready(function () {
 
+   $('#start_counter').click(function(event){
+     $.post("/send_command",
+        {
+           controller_id: "start_counter",
+           value:$('#timer_value').val()
+        },
+        function (data, status) {
+          $("#logs_content").prepend('Timer started <br>')
+          //console.log("timer started.")
+          //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
+        });
+   });
+    $('#pause_counter').click(function(event){
+      $.post("/send_command",
+         {
+            controller_id: "pause_counter",
+            value:0
+         },
+         function (data, status) {
+           $("#logs_content").prepend('Timer paused <br>')
+           //console.log("timer started.")
+           //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
+         });
+    });
    $("a.level_selector").click(function (event) {
      console.log("value:",$(this).data('level'))
        if($(this).data('level')=='room_01'){
@@ -94,4 +124,5 @@ $(document).ready(function () {
   });
   $("#first_level").trigger('click')
 
+  setInterval("getlogs()", 500);
 });
