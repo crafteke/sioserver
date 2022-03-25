@@ -91,7 +91,7 @@ function restart_all_controllers(){
   rpis.forEach(rpi => {
     console.log(`Restart rpi controller: ${rpi}...`)
     //maybe add -i ~/.ssh/face6 or id_rsa
-    exec("ssh pi@" +rpi+ ".local 'sudo systemctl restart controller'", (error, stdout, stderr) => {
+    exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ ".local 'sudo systemctl restart controller'", (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             return;
