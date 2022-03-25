@@ -90,7 +90,8 @@ function restart_all_controllers(){
   const rpis = ['liftpi', 'halpi'];
   rpis.forEach(rpi => {
     console.log(`Restart rpi controller: ${rpi}...`)
-    exec("ssh -i ~/.ssh/face6 pi@" +rpi+ ".local 'sudo systemctl restart controller'", (error, stdout, stderr) => {
+    //maybe add -i ~/.ssh/face6 or id_rsa
+    exec("ssh pi@" +rpi+ ".local 'sudo systemctl restart controller'", (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             return;
