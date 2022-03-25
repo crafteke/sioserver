@@ -2,6 +2,8 @@ const http = require('http');
 const express = require('express');
 const path = require('path');
 const app = express();
+const { exec } = require("child_process");
+restart_all_controllers();
 app.use(express.urlencoded({ extended: true }));
 const router = express.Router();
 
@@ -9,6 +11,7 @@ app.use(express.json());
 
 app.use(express.static('css'));
 app.use(express.static('js'));
+
 
 router.get('/',function(req,res){
   res.sendFile(path.join(__dirname+'/html/index.html'));
@@ -82,6 +85,25 @@ io.on('connection',  function (socket) {
   }
   //setInterval(periodic_function,2000);
 });
+
+function restart_all_controllers(){
+  const rpis = ['liftpi', 'halpi'];
+  rpis.forEach(rpi => {
+    console.log(`Restart rpi controller: ${rpi}...`)
+    exec("ssh -i ~/.ssh/face6 pi@" +rpi+ ".local 'sudo systemctl restart controller'", (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`${rpi} controller Restarted. ${stdout}`);
+    });
+});
+
+}
 
 
 // {
