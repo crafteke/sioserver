@@ -1,7 +1,7 @@
 function getlogs(){
   $.getJSON("/logs", function (data){
-     $("#logs_content_remote").html("> "+data[0].logs_content.split('\n').join("</br> > "));
-     console.log(data)
+     $("#logs_content_remote").html("> "+data.logs_content.split('\n').join("</br> > "));
+     //console.log(data)
   })
 }
 $(document).ready(function () {
