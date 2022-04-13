@@ -70,8 +70,8 @@ io.on('connection',  function (socket) {
   socket.on("Command", (data) => {
       log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
       console.log(log)
-      logs = log+logs+'\n'
-      logs=logs.split("\n").slice(0,10).join('\n');
+      logs = log+"\n"+logs
+      logs=logs.split("\n").slice(0,10).join("\n");
       io.emit("Command",data)
       //socket.emit("beboop",json_message);
 	});
