@@ -1,6 +1,8 @@
 function getlogs(){
   $.getJSON("/logs", function (data){
      $("#logs_content_remote").html("> "+data.logs_content.split('\n').join("</br> > "));
+     html=$("#logs_content").html().split("<br>").slice(0,10).join('<br>');
+     $("#logs_content").html(html)
      //console.log(data)
   })
 }
@@ -108,7 +110,7 @@ $(document).ready(function () {
               value:value
            },
            function (data, status) {
-             $("#logs_content").prepend("Command sent - "+controller_id+" : "+action_text+"</br>");
+             $("#logs_content").prepend("Command sent - "+controller_id+" : "+action_text+"<br>");
            });
      });
      $("select.button").mouseup(button_event_handler)
