@@ -69,8 +69,9 @@ io.on('connection',  function (socket) {
 )
   socket.on("Command", (data) => {
       log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
-		  console.log(log)
-      logs = logs+log+'\n'
+      console.log(log)
+      logs.replace(/\n.*$/, '')
+      logs = log+logs'\n'
       io.emit("Command",data)
       //socket.emit("beboop",json_message);
 	});
