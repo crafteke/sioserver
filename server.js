@@ -88,7 +88,7 @@ io.on('connection',  function (socket) {
 });
 
 function restart_all_controllers(){
-  const rpis = ['liftpi', 'halpi', 'counterpadpi'];
+  const rpis = ['liftpi', 'halpi', 'counterpadpi','rfidpi','incalpi'];
   rpis.forEach(rpi => {
     console.log(`Restart rpi controller: ${rpi}...`)
     //maybe add -i ~/.ssh/face6 or id_rsa
