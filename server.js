@@ -17,6 +17,11 @@ router.get('/',function(req,res){
   res.sendFile(path.join(__dirname+'/html/index.html'));
   //__dirname : It will resolve to your project folder.
 });
+router.get('/cameras',function(req,res){
+  res.sendFile(path.join(__dirname+'/html/camera.html'));
+  //__dirname : It will resolve to your project folder.
+});
+
 
 app.post("/select_level", (req, res) => {
    res.json({
