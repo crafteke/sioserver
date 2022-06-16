@@ -3,6 +3,11 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const { exec } = require("child_process");
+
+
+const rpis = ['liftpi', 'halpi', 'counterpadpi','rfidpi','incalpi'];
+let rpis_status={}
+
 restart_all_controllers();
 app.use(express.urlencoded({ extended: true }));
 const router = express.Router();
@@ -12,7 +17,6 @@ app.use(express.json());
 app.use(express.static('css'));
 app.use(express.static('js'));
 
-
 router.get('/',function(req,res){
   res.sendFile(path.join(__dirname+'/html/index.html'));
   //__dirname : It will resolve to your project folder.
@@ -21,7 +25,10 @@ router.get('/cameras',function(req,res){
   res.sendFile(path.join(__dirname+'/html/camera.html'));
   //__dirname : It will resolve to your project folder.
 });
-
+router.get('/checkout',function(req,res){
+  res.sendFile(path.join(__dirname+'/html/checkout.html'));
+  //__dirname : It will resolve to your project folder.
+});
 
 app.post("/select_level", (req, res) => {
    res.json({
@@ -31,6 +38,10 @@ app.post("/select_level", (req, res) => {
 app.get('/logs',(req,res)=>{
   res.json({logs_content:logs})
 })
+app.get('/co_status',(req,res)=>{
+  res.json(rpis_status)
+})
+
 app.post("/send_command", (req, res) => {
   console.log("Sending command:",req.body);
     io.emit("Command",req.body);
@@ -75,8 +86,10 @@ io.on('connection',  function (socket) {
   socket.on("Command", (data) => {
       log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
       console.log(log)
-      logs = log+"\n"+logs
-      logs=logs.split("\n").slice(0,10).join("\n");
+      if(data.controller_id =! "corridor_padled_state"){
+        logs = log+"\n"+logs
+        logs=logs.split("\n").slice(0,30).join("\n");
+      }
       io.emit("Command",data)
       //socket.emit("beboop",json_message);
 	});
@@ -85,15 +98,47 @@ io.on('connection',  function (socket) {
       clients[data]=socketId;
       clientName=data;
 	});
-  function periodic_function(){
-    io.emit("Command","it's alive!");
-    console.log("beboop");
-  }
-  //setInterval(periodic_function,2000);
+
 });
 
+function checkup(){
+  rpis.forEach(rpi => {
+    console.log(`Checking rpi controller: ${rpi}...`)
+    //maybe add -i ~/.ssh/face6 or id_rsa
+    exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ ".local 'sudo systemctl show controller --no-page;echo \"#----------#\";systemctl show dmx2pwm --no-page'", (error, stdout, stderr) => {
+        if (error) {
+            console.log(`checkout error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`checkout stderr: ${stderr}`);
+            return;
+        }
+        statuses=stdout.split('#----------#')
+        var statuses_json={}
+        var regex_name= /Names=.*/
+        var regex_status= /StatusText=.*/
+        var regex_active= /ActiveState=.*/
+        statuses.forEach(function(status){
+          stat_json={}
+          if(regex_status.test(status)){
+            stat_json["notify"]=regex_status.exec(status)[0].split('=')[1]
+          }
+          if(regex_active.test(status)){
+            stat_json["status"]=regex_active.exec(status)[0].split('=')[1]
+          }
+          if(regex_name.test(status)){
+              statuses_json[regex_name.exec(status)[0].split('=')[1]]=stat_json
+          }
+        });
+        rpis_status[rpi]=statuses_json
+        //console.log(`${rpi} controller Restarted. ${stdout}`);
+    });
+  });
+}
+setInterval(checkup,5000);
+
 function restart_all_controllers(){
-  const rpis = ['liftpi', 'halpi', 'counterpadpi','rfidpi','incalpi'];
   rpis.forEach(rpi => {
     console.log(`Restart rpi controller: ${rpi}...`)
     //maybe add -i ~/.ssh/face6 or id_rsa
