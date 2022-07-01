@@ -73,7 +73,7 @@ io.on('connection',  function (socket) {
 		socket.to(clients["roof_controller"]).emit("MessageIn",data)
 	});
   socket.on("Message", (data) => {
-		  console.log("Message sending from:"+clientName+" to:"+data.to + " on socketid:"+clients[data.to]);
+		  //console.log("Message sending from:"+clientName+" to:"+data.to + " on socketid:"+clients[data.to]);
       socket.to(clients[data.to]).emit("Message",data.msg)
       //socket.emit("beboop",json_message);
 	});
@@ -86,7 +86,7 @@ io.on('connection',  function (socket) {
   socket.on("Command", (data) => {
       log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
       console.log(log)
-      if(data.controller_id =! "corridor_padled_state"){
+      if(data.controller_id != "corridor_padled_state"){
         logs = log+"\n"+logs
         logs=logs.split("\n").slice(0,30).join("\n");
       }
