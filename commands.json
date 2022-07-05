@@ -7,7 +7,7 @@
     "room_03":{"cube_event":{"-1":-1,"+1":1},"path_1":{"open":0, "closed":1},"path_2":{"open":0, "closed":1},"path_3":{"open":0, "closed":1}},
     "hints":{"hint_hal":{"none":0,"plaque circuit clignote":1,"bouton porte":2,"Cartes manquantes":3,"Cartes manquantes":4},
               "hint_keypad":{"none":0,"dispositif ouverture portes couloir":1,"fouille":2,"ouvrir porte systeme":3,"indique porte ouvrir":4,"code plafond":5,"couleur portes":6},
-              "hint_room02":{"none":0,"electricite off":1,"lire documentation":2,"circuit pas dans le vide":3,"chercher plaquettes":4},
+              "hint_room02":{"none":0,"electricite off":1,"lire documentation":2,"circuit pas dans le vide":3,"chercher plaquettes":4,"borne inspection labo":5,"guider joueur coeur":6},
               "hint_room03":{"none":0,"code derrier porte":1,"cubes au-dessus porte":2}},
-    "bypass":{"keypad_button_keypadValidate":{"released":0, "pushed":1},"constructor_button_constructorValidate":{"released":0, "pushed":1}}
+    "bypass":{"keypad_button_keypadValidate":{"released":0, "pushed":1},"constructor_button_constructorValidate":{"released":0, "pushed":1},"room01_button_room01Validate":{"released":0, "pushed":1}}
 }
