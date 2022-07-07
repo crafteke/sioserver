@@ -4,11 +4,18 @@ const path = require('path');
 const app = express();
 const { exec } = require("child_process");
 
-
-const rpis = ['liftpi', 'halpi', 'counterpadpi','rfidpi','incalpi'];
+const rpi_services={'liftpi':["controller","dmx2pwm"],
+'halpi':['controller','dmx2pwm'],
+'counterpadPi':['controller'],
+'lockerspi':['controller','dmx2pwm','elwire_controller'],
+'rfidpi':['controller','dmx2pwm'],
+'incalpi':['controller','dmx2pwm','incal_animator'],
+'roofpi':['dmxspi'],
+'room01lightpi':['dmx2pwm']}
 let rpis_status={}
 
-restart_all_controllers();
+//restart_all_controllers();
+
 app.use(express.urlencoded({ extended: true }));
 const router = express.Router();
 
@@ -16,6 +23,7 @@ app.use(express.json());
 
 app.use(express.static('css'));
 app.use(express.static('js'));
+app.set('view engine', 'pug');
 
 router.get('/',function(req,res){
   res.sendFile(path.join(__dirname+'/html/index.html'));
@@ -25,8 +33,9 @@ router.get('/cameras',function(req,res){
   res.sendFile(path.join(__dirname+'/html/camera.html'));
   //__dirname : It will resolve to your project folder.
 });
-router.get('/checkout',function(req,res){
-  res.sendFile(path.join(__dirname+'/html/checkout.html'));
+router.get('/dashboard',function(req,res){
+  res.render('dashboard',{rpi_services: rpi_services})
+  //res.sendFile(path.join(__dirname+'/html/checkout.html'));
   //__dirname : It will resolve to your project folder.
 });
 
@@ -40,6 +49,15 @@ app.get('/logs',(req,res)=>{
 })
 app.get('/co_status',(req,res)=>{
   res.json(rpis_status)
+})
+app.get('/restart_service/:service',(req,res)=>{
+  var service = req.params.service
+  console.log("Restart request:"+service)
+  service = service.split('-')
+  restart_rpi_service(service[0],service[1])
+  res.json([{
+     status: 'ok'
+  }])
 })
 
 app.post("/send_command", (req, res) => {
@@ -56,6 +74,7 @@ server.listen(port);console.debug('Server listening on port ' + port);
 
 const commands= require('./commands.json')
 var logs=""
+
 /*--------SOCKET IO Server ----------*/
 var io = require('socket.io')({});
 
@@ -100,59 +119,92 @@ io.on('connection',  function (socket) {
 	});
 
 });
-
-function checkup(){
-  rpis.forEach(rpi => {
-    console.log(`Checking rpi controller: ${rpi}...`)
-    //maybe add -i ~/.ssh/face6 or id_rsa
-    exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ ".local 'sudo systemctl show controller --no-page;echo \"#----------#\";systemctl show dmx2pwm --no-page'", (error, stdout, stderr) => {
-        if (error) {
-            console.log(`checkout error: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.log(`checkout stderr: ${stderr}`);
-            return;
-        }
-        statuses=stdout.split('#----------#')
-        var statuses_json={}
-        var regex_name= /Names=.*/
-        var regex_status= /StatusText=.*/
-        var regex_active= /ActiveState=.*/
-        statuses.forEach(function(status){
-          stat_json={}
-          if(regex_status.test(status)){
-            stat_json["notify"]=regex_status.exec(status)[0].split('=')[1]
-          }
-          if(regex_active.test(status)){
-            stat_json["status"]=regex_active.exec(status)[0].split('=')[1]
-          }
-          if(regex_name.test(status)){
-              statuses_json[regex_name.exec(status)[0].split('=')[1]]=stat_json
-          }
-        });
-        rpis_status[rpi]=statuses_json
-        //console.log(`${rpi} controller Restarted. ${stdout}`);
-    });
-  });
+function ping(host){
+exec(`ping -c 1 ${host} > /dev/null && echo 'ok' ||  echo 'ko'`, (error, stdout, stderr) => {
+    return stdout=='ok'
+  })
 }
+//initialize
+Object.entries(rpi_services).forEach(([rpi,services])=>
+{
+    rpis_status[rpi]={}
+})
+function checkup(){
+  Object.entries(rpi_services).forEach(([rpi,services])=>
+  {
+      services.forEach(service=>{
+        //maybe add -i ~/.ssh/face6 or id_rsa
+        var statuses_json={}
+        exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ ".local 'sudo systemctl show "+service+" --no-page'", (error, stdout, stderr) => {
+            if (error) {
+                console.log(`check error: ${error.message}`);
+                statuses_json+={name:service,'error':error.message}
+                return;
+            }
+            if (stderr) {
+                console.log(`check stderr: ${stderr}`);
+                statuses_json+={name:service,'error':stderr}
+                return;
+            }
+            var regex_name= /Names=.*/
+            var regex_status= /StatusText=.*/
+            var regex_active= /ActiveState=.*/
+            // if(regex_name.test(stdout)){
+            //     statuses_json["name"]=regex_name.exec(stdout)[0].split('=')[1]
+            // }
+            statuses_json['name']=service
+
+              if(regex_active.test(stdout)){
+                statuses_json['status']=regex_active.exec(stdout)[0].split('=')[1]
+              }
+              statuses_json['notify']=''
+
+              if(regex_status.test(stdout)){
+                statuses_json['notify']=regex_status.exec(stdout)[0].split('=')[1]
+              }
+              rpis_status[rpi][service]=statuses_json
+            });
+          })
+
+    })
+}
+//for debug
+// function output(){
+//   console.log(JSON.stringify(rpis_status))
+// }
+//setInterval(output,2000);
+
 setInterval(checkup,5000);
 
+
+function restart_rpi_service(rpi,service){
+  exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ ".local 'sudo systemctl restart "+ service +"'", (error, stdout, stderr) => {
+      if (error) {
+          console.log(`error: ${error.message}`);
+          return;
+      }
+      if (stderr) {
+          console.log(`stderr: ${stderr}`);
+          return;
+      }
+      console.log(`${rpi} service ${service} Restarted. ${stdout}`);
+    })
+}
 function restart_all_controllers(){
-  rpis.forEach(rpi => {
-    console.log(`Restart rpi controller: ${rpi}...`)
-    //maybe add -i ~/.ssh/face6 or id_rsa
-    exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ ".local 'sudo systemctl restart controller'", (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.log(`stderr: ${stderr}`);
-            return;
-        }
-        console.log(`${rpi} controller Restarted. ${stdout}`);
-    });
+  Object.entries(rpi_services).forEach(([rpi,services])=>
+  {
+    console.log('Restarting services RPi:'+rpi)
+
+    services.forEach(service=>{
+      //maybe add -i ~/.ssh/face6 or id_rsa
+      restart_rpi_service(rpi,service)
+  })
+
+  //
+  // services.forEach(rpi => {
+  //   console.log(`Restart rpi controller: ${rpi}...`)
+  //
+  //   });
 });
 
 }
