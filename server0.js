@@ -4,25 +4,17 @@ const path = require('path');
 const app = express();
 const { exec } = require("child_process");
 
-// const rpi_services={'liftpi':["controller","dmx2pwm"],
-// 'halpi':['controller','dmx2pwm'],
-// 'counterpadPi':['controller'],
-// 'lockerspi':['controller','dmx2pwm','elwire_controller'],
-// 'rfidpi':['controller','dmx2pwm'],
-// 'incalpi':['controller','dmx2pwm','incal_animator'],
-// 'roofpi':['dmxspi'],
-// 'room01lightpi':['dmx2pwm']}
-const rpi_services={'10.0.0.215':["controller","dmx2pwm"],
-'10.0.0.210':['controller','dmx2pwm'],
-'10.0.0.212':['controller'],
-'10.0.0.214':['controller','dmx2pwm','elwire_controller'],
-'10.0.0.211':['controller','dmx2pwm'],
-'10.0.0.213':['controller','dmx2pwm','incal_animator'],
-'10.0.0.238':['dmxspi'],
-'10.0.0.216':['dmx2pwm']}
+const rpi_services={'liftpi':["controller","dmx2pwm"],
+'halpi':['controller','dmx2pwm'],
+'counterpadPi':['controller'],
+'lockerspi':['controller','dmx2pwm','elwire_controller'],
+'rfidpi':['controller','dmx2pwm'],
+'incalpi':['controller','dmx2pwm','incal_animator'],
+'roofpi':['dmxspi'],
+'room01lightpi':['dmx2pwm']}
 let rpis_status={}
 
-restart_all_controllers();
+//restart_all_controllers();
 
 app.use(express.urlencoded({ extended: true }));
 const router = express.Router();
@@ -125,28 +117,8 @@ io.on('connection',  function (socket) {
       clients[data]=socketId;
       clientName=data;
 	});
-  socket.once('disconnect', function () {
-    clients[data]=false;
-  });
-
 
 });
-
-function check_clients(){
-  console.log(JSON.stringify(clients))
-  Object.entries(clients).forEach(([name,s_id])=>{
-    if(s_id) {
-      console.log(name+":"+'connected');
-    }
-    else{
-      console.log(name+":"+'disconnected');
-
-    }
-})
-}
-setInterval(check_clients,2000);
-
-
 function ping(host){
 exec(`ping -c 1 ${host} > /dev/null && echo 'ok' ||  echo 'ko'`, (error, stdout, stderr) => {
     return stdout=='ok'
@@ -202,11 +174,11 @@ function checkup(){
 // }
 //setInterval(output,2000);
 
-setInterval(checkup,30000);
+setInterval(checkup,5000);
 
 
 function restart_rpi_service(rpi,service){
-  exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ " 'sudo systemctl restart "+ service +"'", (error, stdout, stderr) => {
+  exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ ".local 'sudo systemctl restart "+ service +"'", (error, stdout, stderr) => {
       if (error) {
           console.log(`error: ${error.message}`);
           return;
