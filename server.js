@@ -162,7 +162,7 @@ function checkup(){
       services.forEach(service=>{
         //maybe add -i ~/.ssh/face6 or id_rsa
         var statuses_json={}
-        exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ ".local 'sudo systemctl show "+service+" --no-page'", (error, stdout, stderr) => {
+        exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ " 'sudo systemctl show "+service+" --no-page'", (error, stdout, stderr) => {
             if (error) {
                 console.log(`check error: ${error.message}`);
                 statuses_json+={name:service,'error':error.message}
@@ -205,7 +205,7 @@ setInterval(checkup,30000);
 
 
 function restart_rpi_service(rpi,service){
-  exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ ".local 'sudo systemctl restart "+ service +"'", (error, stdout, stderr) => {
+  exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ " 'sudo systemctl restart "+ service +"'", (error, stdout, stderr) => {
       if (error) {
           console.log(`error: ${error.message}`);
           return;
