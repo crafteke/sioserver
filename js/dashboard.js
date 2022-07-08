@@ -34,6 +34,7 @@ function getcheckout(){
             tbl_row+='<td>'+generate_label(k,v)+'</td>'
        });
        //content += "<tr class=\""+( odd_even ? "odd" : "even")+"\">"+tbl_row+"</tr>";
+       //tbl_row+='<i class="icon icon-menu"></i>'
        tbl_row+='<td><button onclick="click_restart(this)" class="btn" data-rpi-controller='+k+'-'+name+'>Restart</button></td>'
        tbl_row+='</tr>'
        content+=tbl_row

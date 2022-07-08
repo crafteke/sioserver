@@ -4,14 +4,22 @@ const path = require('path');
 const app = express();
 const { exec } = require("child_process");
 
-const rpi_services={'liftpi':["controller","dmx2pwm"],
-'halpi':['controller','dmx2pwm'],
-'counterpadPi':['controller'],
-'lockerspi':['controller','dmx2pwm','elwire_controller'],
-'rfidpi':['controller','dmx2pwm'],
-'incalpi':['controller','dmx2pwm','incal_animator'],
-'roofpi':['dmxspi'],
-'room01lightpi':['dmx2pwm']}
+// const rpi_services={'liftpi':["controller","dmx2pwm"],
+// 'halpi':['controller','dmx2pwm'],
+// 'counterpadPi':['controller'],
+// 'lockerspi':['controller','dmx2pwm','elwire_controller'],
+// 'rfidpi':['controller','dmx2pwm'],
+// 'incalpi':['controller','dmx2pwm','incal_animator'],
+// 'roofpi':['dmxspi'],
+// 'room01lightpi':['dmx2pwm']}
+const rpi_services={'10.0.0.215':["controller","dmx2pwm"],
+'10.0.0.210':['controller','dmx2pwm'],
+'10.0.0.212':['controller'],
+'10.0.0.214':['controller','dmx2pwm','elwire_controller'],
+'10.0.0.211':['controller','dmx2pwm'],
+'10.0.0.213':['controller','dmx2pwm','incal_animator'],
+'10.0.0.238':['dmxspi'],
+'10.0.0.216':['dmx2pwm']}
 let rpis_status={}
 
 //restart_all_controllers();
@@ -174,7 +182,7 @@ function checkup(){
 // }
 //setInterval(output,2000);
 
-setInterval(checkup,5000);
+setInterval(checkup,30000);
 
 
 function restart_rpi_service(rpi,service){
