@@ -204,8 +204,8 @@ function checkup(){
 //   console.log(JSON.stringify(rpis_status))
 // }
 //setInterval(output,2000);
-
-setInterval(checkup,30000);
+checkup()
+setInterval(checkup,120000);
 
 
 function restart_rpi_service(rpi,service){
