@@ -58,6 +58,9 @@ app.get('/logs',(req,res)=>{
 app.get('/co_status',(req,res)=>{
   res.json(rpis_status)
 })
+app.get('/sio_status',(req,res)=>{
+  res.json(clients)
+})
 app.get('/restart_service/:service',(req,res)=>{
   var service = req.params.service
   console.log("Restart request:"+service)
@@ -144,7 +147,7 @@ function check_clients(){
     }
 })
 }
-setInterval(check_clients,2000);
+//setInterval(check_clients,2000);
 
 
 function ping(host){
