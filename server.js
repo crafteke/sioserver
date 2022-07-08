@@ -125,8 +125,27 @@ io.on('connection',  function (socket) {
       clients[data]=socketId;
       clientName=data;
 	});
+  s.once('disconnect', function () {
+    client[data]=false;
+  });
+
 
 });
+
+function check_clients(){
+  Object.entries(clients).forEach(([name,s_id])=>{
+    if(s_id) {
+      console.log(name+":"+'connected');
+    }
+    else{
+      console.log(name+":"+'disconnected');
+
+    }
+})
+}
+setInterval(check_clients,2000);
+
+
 function ping(host){
 exec(`ping -c 1 ${host} > /dev/null && echo 'ok' ||  echo 'ko'`, (error, stdout, stderr) => {
     return stdout=='ok'
