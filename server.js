@@ -22,7 +22,7 @@ const rpi_services={'10.0.0.215':["controller","dmx2pwm"],
 '10.0.0.216':['dmx2pwm']}
 let rpis_status={}
 
-//restart_all_controllers();
+restart_all_controllers();
 
 app.use(express.urlencoded({ extended: true }));
 const router = express.Router();
@@ -125,14 +125,15 @@ io.on('connection',  function (socket) {
       clients[data]=socketId;
       clientName=data;
 	});
-  s.once('disconnect', function () {
-    client[data]=false;
+  socket.once('disconnect', function () {
+    clients[data]=false;
   });
 
 
 });
 
 function check_clients(){
+  console.log(JSON.stringify(clients))
   Object.entries(clients).forEach(([name,s_id])=>{
     if(s_id) {
       console.log(name+":"+'connected');
