@@ -129,7 +129,7 @@ io.on('connection',  function (socket) {
       clientName=data;
 	});
   socket.once('disconnect', function () {
-    clients[data]=false;
+    clients[clientName]=false;
   });
 
 
@@ -161,6 +161,7 @@ Object.entries(rpi_services).forEach(([rpi,services])=>
     rpis_status[rpi]={}
 })
 function checkup(){
+  console.log('checking service status')
   Object.entries(rpi_services).forEach(([rpi,services])=>
   {
       services.forEach(service=>{
@@ -204,7 +205,7 @@ function checkup(){
 //   console.log(JSON.stringify(rpis_status))
 // }
 //setInterval(output,2000);
-checkup()
+setTimeout(checkup,10000)
 setInterval(checkup,120000);
 
 
