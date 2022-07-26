@@ -44,7 +44,7 @@ html
                         select(class="form-select")
                           option(value='none',selected='') None
                           each value,key in values
-                            option(value=value) #{key}
+                            option(data-controller_id=command,value=value) #{key}
 
 
       div(class="modal",id="modal-logs")
