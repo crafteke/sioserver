@@ -90,11 +90,11 @@ function click_getjournal(btn){
   console.log($(btn).data('rpi-service') + ' got clicked.')
 
   var service = $(btn).data('rpi-service')
-
+  $("#modal-logs").toggleClass('active');
   $.get('/get_journal/'+service, function(data){
-    $("#modal-logs").toggleClass('active');
     $("#log_title").html(service)
-    $("#log_content").html(data.content)
+    $("#log_content").removeClass('loading loading-lg')
+    $("#log_content").html("<div style='white-space:pre'>"+data.content+"</div>")
     console.log(JSON.stringify(data))})
 }
 

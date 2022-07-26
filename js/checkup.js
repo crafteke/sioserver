@@ -27,9 +27,9 @@ $(document).ready(function () {
 $("select").change(function (event) {
   element=$(this).children("option:selected")
   controller_id=element.data('controller_id')
-
    value=element.val()
-   console.log(controller_id)
+if(value != 'none'){
+  $(this).val('none')
   $.post("/send_command",
    {
       controller_id: controller_id,
@@ -37,8 +37,9 @@ $("select").change(function (event) {
    },
    function (data, status) {
      //$("#logs_content").prepend('Timer paused <br>')
-     //console.log("timer started.")
+     console.log("Command sent.")
      //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
    });
+}
  });
 });
