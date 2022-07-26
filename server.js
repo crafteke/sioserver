@@ -1,28 +1,30 @@
 const http = require('http');
 const express = require('express');
 const path = require('path');
+var events = require('events');
+var event_emitter = new events.EventEmitter();
 const app = express();
 const { exec } = require("child_process");
-
-// const rpi_services={'liftpi':["controller","dmx2pwm"],
-// 'halpi':['controller','dmx2pwm'],
-// 'counterpadPi':['controller'],
-// 'lockerspi':['controller','dmx2pwm','elwire_controller'],
-// 'rfidpi':['controller','dmx2pwm'],
-// 'incalpi':['controller','dmx2pwm','incal_animator'],
-// 'roofpi':['dmxspi'],
-// 'room01lightpi':['dmx2pwm']}
-const rpi_services={'10.0.0.215':["controller","dmx2pwm"],
-'10.0.0.210':['controller','dmx2pwm'],
-'10.0.0.212':['controller'],
-'10.0.0.214':['controller','dmx2pwm','elwire_controller'],
-'10.0.0.211':['controller','dmx2pwm'],
-'10.0.0.213':['controller','dmx2pwm','incal_animator'],
-'10.0.0.238':['dmxspi'],
-'10.0.0.216':['dmx2pwm']}
+//todo artnet
+//https://github.com/margau/dmxnet
+//write a all blink method that set all channels to 255 on everybody
+const rpi_services={'liftpi':["controller","dmx2pwm"],
+'halpi':['controller','dmx2pwm'],
+'counterpadpi':['controller'],
+'lockerspi':['controller','dmx2pwm','elwire_controller'],
+'rfidpi':['controller','dmx2pwm'],
+'incalpi':['controller','dmx2pwm','incal_animator'],
+'roofpi':['dmxspi'],
+'room01lightpi':['dmx2pwm']}
+// const rpi_services={'10.0.0.215':["controller","dmx2pwm"],
+// '10.0.0.210':['controller','dmx2pwm'],
+// '10.0.0.212':['controller'],
+// '10.0.0.214':['controller','dmx2pwm','elwire_controller'],
+// '10.0.0.211':['controller','dmx2pwm'],
+// '10.0.0.213':['controller','dmx2pwm','incal_animator'],
+// '10.0.0.238':['dmxspi'],
+// '10.0.0.216':['dmx2pwm']}
 let rpis_status={}
-
-restart_all_controllers();
 
 app.use(express.urlencoded({ extended: true }));
 const router = express.Router();
@@ -46,6 +48,15 @@ router.get('/dashboard',function(req,res){
   //res.sendFile(path.join(__dirname+'/html/checkout.html'));
   //__dirname : It will resolve to your project folder.
 });
+router.get('/checkup',function(req,res){
+  var commands_filtered = Object.keys(commands).filter((key) =>  key != 'hints' && key != 'bypass').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
+  //commands_filtered={}
+  res.render('checkup',{level_commands: commands_filtered})
+  //res.sendFile(path.join(__dirname+'/html/checkout.html'));
+  //__dirname : It will resolve to your project folder.
+});
+
+
 
 app.post("/select_level", (req, res) => {
    res.json({
@@ -70,6 +81,18 @@ app.get('/restart_service/:service',(req,res)=>{
      status: 'ok'
   }])
 })
+app.get('/get_journal/:service',(req,res)=>{
+  var service = req.params.service
+  console.log("Get journal request:"+service)
+  service = service.split('-')
+  //getlogs_rpi_service(service[0],service[1])
+  //to await
+  res.json({
+     content: 'beeep beeeeeep boooop'
+  })
+})
+
+
 
 app.post("/send_command", (req, res) => {
   console.log("Sending command:",req.body);
@@ -78,10 +101,46 @@ app.post("/send_command", (req, res) => {
       status: 'ok'
    }])
 })
+app.get("/stream_commands", (req, res) => {
+    res.set({
+      "Access-Control-Allow-Origin": "*",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive",
+      "Content-Type": "text/event-stream",
+    });
+    res.flushHeaders();
+    event_emitter.on("SIO_Command", (data) => {
+        console.log('command event')
+        res.write(JSON.stringify(data))
+    });
+    res.on("close", () => {
+      res.end();
+    });
+  })
+
+app.get("/stream_services", (req, res) => {
+    res.set({
+      "Access-Control-Allow-Origin": "*",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive",
+      "Content-Type": "text/event-stream",
+    });
+    res.flushHeaders();
+
+    const interval = setInterval(() => {
+      res.write(JSON.stringify(rpis_status))
+    }, 1000);
+
+    res.on("close", () => {
+      clearInterval(interval);
+      res.end();
+    });
+  })
 app.use('/', router);
 const server = http.createServer(app);
 const port = 3000;
-server.listen(port);console.debug('Server listening on port ' + port);
+server.listen(port);
+console.debug('Server listening on port ' + port);
 
 const commands= require('./commands.json')
 var logs=""
@@ -100,7 +159,8 @@ io.on('connection',  function (socket) {
   var clientName='';
   console.log('New connection from ' + clientIp + " with socket ID:"+socketId);
 	socket.on('Binary', (data)=>{
-		socket.to(clients["roof_controller"]).emit("MessageIn",data)
+    //old time when we stream tcp package to roof
+		//socket.to(clients["roof_controller"]).emit("MessageIn",data)
 	});
   socket.on("Message", (data) => {
 		  //console.log("Message sending from:"+clientName+" to:"+data.to + " on socketid:"+clients[data.to]);
@@ -114,22 +174,23 @@ io.on('connection',  function (socket) {
   }
 )
   socket.on("Command", (data) => {
-      log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
-      console.log(log)
-      if(data.controller_id != "corridor_padled_state"){
-        logs = log+"\n"+logs
-        logs=logs.split("\n").slice(0,30).join("\n");
-      }
+      //log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
+      //console.log(log)
+      // if(data.controller_id != "corridor_padled_state"){
+      //   logs = log+"\n"+logs
+      //   logs=logs.split("\n").slice(0,30).join("\n");
+      // }
+      event_emitter.emit('SIO_Command',data)
       io.emit("Command",data)
       //socket.emit("beboop",json_message);
 	});
   socket.on("Register", (data) => {
 		  console.log("Registration received:"+data);
-      clients[data]=socketId;
-      clientName=data;
+      clients[data.toLowerCase()]=socketId;
+      clientName=data.toLowerCase();
 	});
   socket.once('disconnect', function () {
-    clients[data]=false;
+    clients[clientName]=false;
   });
 
 
@@ -193,19 +254,55 @@ function checkup(){
               if(regex_status.test(stdout)){
                 statuses_json['notify']=regex_status.exec(stdout)[0].split('=')[1]
               }
+              if(service=='controller'){
+                statuses_json['sio_status']=clients[rpi] ? 'UP' : 'DOWN';
+              }
+              else{
+                statuses_json['sio_status']=false
+              }
               rpis_status[rpi][service]=statuses_json
             });
           })
 
     })
 }
+function generate_debug_data(){
+  Object.entries(rpi_services).forEach(([rpi,services])=>
+  {
+      services.forEach(service=>{
+        //maybe add -i ~/.ssh/face6 or id_rsa
+        var statuses_json={}
+        statuses_json['name']=service
+        statuses_json['status']='active'
+        statuses_json['notify']='sio:1'
+        if(service=='controller'){
+          statuses_json['sio_status']='DOWN'
+        }
+        else{
+          statuses_json['sio_status']=false
+        }
+          rpis_status[rpi][service]=statuses_json
+        })
+
+    })
+
+}
 //for debug
 // function output(){
 //   console.log(JSON.stringify(rpis_status))
 // }
 //setInterval(output,2000);
-checkup()
-setInterval(checkup,120000);
+if(true){ //set to true for production
+  restart_all_controllers();
+  checkup()
+  setInterval(checkup,2000);
+}
+//this is for offline dev, populate & simulate datachange
+else{
+  generate_debug_data()
+  var status=['active','inactive']
+  setInterval(function(){rpis_status['liftpi']['controller']['status']=status[Math.floor(Math.random()*2)]},2000)
+}
 
 
 function restart_rpi_service(rpi,service){
@@ -221,6 +318,21 @@ function restart_rpi_service(rpi,service){
       console.log(`${rpi} service ${service} Restarted. ${stdout}`);
     })
 }
+
+function getlogs_rpi_service(rpi,service){
+  exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ " 'journalctl -u "+ service +".service | tail -n200", (error, stdout, stderr) => {
+      if (error) {
+          console.log(`error: ${error.message}`);
+          return;
+      }
+      if (stderr) {
+          console.log(`stderr: ${stderr}`);
+          return;
+      }
+      return stdout;
+    })
+}
+
 function restart_all_controllers(){
   Object.entries(rpi_services).forEach(([rpi,services])=>
   {

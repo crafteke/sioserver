@@ -7,8 +7,11 @@ const
 
 ioClient.on("Command", (msg)=> {console.log(msg)});
 
+var toggle=0
 function periodic_function(){
-  ioClient.emit("Command",{controller_id:"tenfoutraidescontrollerid",action:42});
-  console.log("beboop");
+  ioClient.emit("Command",{controller_id:"lift_button_start",value:toggle});
+  toggle++
+  toggle=toggle%2
+  //console.log("beboop");
 }
-//setInterval(periodic_function,1000);
+setInterval(periodic_function,1000);

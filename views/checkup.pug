@@ -5,29 +5,47 @@ html
       include ../css/spectre-exp.min.css
       include ../css/spectre-icons.min.css
     script(src='jquery-3.6.0.min.js')
-    script(src='dashboard.js')
+    script(src='checkup.js')
   body
     div(class='container')
       ul(class="tab tab-block")
-        li(class="tab-item active")
-          a(href="/dashboard",class="active") Services
         li(class="tab-item")
-          a(href="/checkup") Checkup
+          a(href="/dashboard") Services
+        li(class="tab-item active")
+          a(href="/checkup",class="active") Checkup
       div(class='columns')
-        div(class='column col-8')
-          each services, rpi in rpi_services
+        div(class='column col-10')
             br
-            h4=rpi
-            table(class='table table-striped table-hover')
-              thead
-                th(width='30%') Service
-                th(width='20%') Running
-                th(width='40%') Notify
-                th(width='20%') SIO
-                th logs
-                <!-- th console --!>
-                th action
-              tbody(id=rpi)
+            each commands,level in level_commands
+              h4=level
+              table(class='table table-striped table-hover')
+                thead
+                  th(width='15%') Command
+                  th(width='15%') Value
+                  th(width='15%')
+                  th(width='15%')
+                  th(width='15%')
+                  th(width='15%')
+                  th Trigger
+                tbody
+                each values, command in commands
+                  tr(id=command)
+                    td=command
+                    each value,key in values
+                      td(data-value=value)
+                        span(class="label label-error")
+                          =key
+                    - var n=0;
+                    while n<(5-Object.keys(values).length)
+                      td
+                      - n++
+                    td
+                      div(class="form-group")
+                        select(class="form-select")
+                          option(value='none',selected='') None
+                          each value,key in values
+                            option(value=value) #{key}
+
 
       div(class="modal",id="modal-logs")
         a(href="#close",class="modal-overlay",aria-label="Close")
