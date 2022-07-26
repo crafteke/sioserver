@@ -114,6 +114,7 @@ app.post("/send_command", (req, res) => {
       status: 'ok'
    }])
 })
+//curl 10.0.0.241:3000/stream_commands --no-buffer
 app.get("/stream_commands", (req, res) => {
     res.set({
       "Access-Control-Allow-Origin": "*",
@@ -124,7 +125,7 @@ app.get("/stream_commands", (req, res) => {
     res.flushHeaders();
     event_emitter.on("SIO_Command", (data) => {
         console.log('command event')
-        res.write(JSON.stringify(data))
+        res.write(JSON.stringify(data)+'\n')
     });
     res.on("close", () => {
       res.end();
