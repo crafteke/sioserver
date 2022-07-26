@@ -16,6 +16,10 @@ const rpi_services={'liftpi':["controller","dmx2pwm"],
 'incalpi':['controller','dmx2pwm','incal_animator'],
 'roofpi':['dmxspi'],
 'room01lightpi':['dmx2pwm']}
+const hosts_ip={'roofpi':'10.0.0.238','rfidpi':'10.0.0.211','incalpi':'10.0.0.213',
+'lockerspi':'10.0.0.214','liftpi':'10.0.0.215','room01lightpi':'10.0.0.216',
+ 'halpi':'10.0.0.210','counterpadpi':'10.0.0.212','watchpi':'10.0.0.204'}
+
 // const rpi_services={'10.0.0.215':["controller","dmx2pwm"],
 // '10.0.0.210':['controller','dmx2pwm'],
 // '10.0.0.212':['controller'],
@@ -85,10 +89,18 @@ app.get('/get_journal/:service',(req,res)=>{
   var service = req.params.service
   console.log("Get journal request:"+service)
   service = service.split('-')
-  //getlogs_rpi_service(service[0],service[1])
-  //to await
+  getlogs_rpi_service(service[0],service[1])
+  // var result = await return new Promise((resolve, reject) => {
+  //   getlogs_rpi_service(service[0],service[1],(successResponse) => {
+  //       resolve(successResponse);
+  //   }, (errorResponse) => {
+  //       reject(errorResponse);
+  //   });
+  // });
+  event_emitter.on("journalctl_event", (data) => {
   res.json({
-     content: 'beeep beeeeeep boooop'
+     content: data
+   })
   })
 })
 
@@ -96,6 +108,7 @@ app.get('/get_journal/:service',(req,res)=>{
 
 app.post("/send_command", (req, res) => {
   console.log("Sending command:",req.body);
+  event_emitter.emit('SIO_Command',req.body)
     io.emit("Command",req.body);
    res.json([{
       status: 'ok'
@@ -227,7 +240,7 @@ function checkup(){
       services.forEach(service=>{
         //maybe add -i ~/.ssh/face6 or id_rsa
         var statuses_json={}
-        exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ " 'sudo systemctl show "+service+" --no-page'", (error, stdout, stderr) => {
+        exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'sudo systemctl show "+service+" --no-page'", (error, stdout, stderr) => {
             if (error) {
                 console.log(`check error: ${error.message}`);
                 statuses_json+={name:service,'error':error.message}
@@ -295,7 +308,7 @@ function generate_debug_data(){
 if(true){ //set to true for production
   restart_all_controllers();
   checkup()
-  setInterval(checkup,2000);
+  setInterval(checkup,10000);
 }
 //this is for offline dev, populate & simulate datachange
 else{
@@ -304,9 +317,8 @@ else{
   setInterval(function(){rpis_status['liftpi']['controller']['status']=status[Math.floor(Math.random()*2)]},2000)
 }
 
-
 function restart_rpi_service(rpi,service){
-  exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ " 'sudo systemctl restart "+ service +"'", (error, stdout, stderr) => {
+  exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'sudo systemctl restart "+ service +"'", (error, stdout, stderr) => {
       if (error) {
           console.log(`error: ${error.message}`);
           return;
@@ -319,8 +331,9 @@ function restart_rpi_service(rpi,service){
     })
 }
 
+
 function getlogs_rpi_service(rpi,service){
-  exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +rpi+ " 'journalctl -u "+ service +".service | tail -n200", (error, stdout, stderr) => {
+   exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'journalctl -u "+ service +".service | tail -n200'", (error, stdout, stderr) => {
       if (error) {
           console.log(`error: ${error.message}`);
           return;
@@ -329,9 +342,25 @@ function getlogs_rpi_service(rpi,service){
           console.log(`stderr: ${stderr}`);
           return;
       }
-      return stdout;
+      event_emitter.emit('journalctl_event',stdout)
+      return(stdout);
     })
 }
+// function getlogs_rpi_service(rpi,services,successCallback, errorCallback){
+//    exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'journalctl -u "+ service +".service | tail -n200'", (error, stdout, stderr) => {
+//       if (error) {
+//           console.log(`error: ${error.message}`);
+//           errorCallback(error.message)
+//           // return;
+//       }
+//       if (stderr) {
+//           console.log(`stderr: ${stderr}`);
+//           errorCallback(stderr)
+//           //return;
+//       }
+//       successCallback(stdout);
+//     })
+// }
 
 function restart_all_controllers(){
   Object.entries(rpi_services).forEach(([rpi,services])=>
