@@ -11,7 +11,6 @@
     if (done) {
       break;
     }
-  console.log(new TextDecoder().decode(value));
   json=JSON.parse(new TextDecoder().decode(value));
   //refreshServicesStatus(json)
   console.log(JSON.stringify(json));
