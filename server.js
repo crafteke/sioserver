@@ -5,8 +5,10 @@ var events = require('events');
 var event_emitter = new events.EventEmitter();
 const app = express();
 const { exec } = require("child_process");
-//todo artnet
-//https://github.com/margau/dmxnet
+var dmxlib=require('dmxnet');
+var dmxnet = new dmxlib.dmxnet();
+const commands= require('./commands.json')
+const dmx_universes=require('./dmx_universes.json')
 //write a all blink method that set all channels to 255 on everybody
 const rpi_services={'liftpi':["controller","dmx2pwm"],
 'halpi':['controller','dmx2pwm'],
@@ -56,6 +58,13 @@ router.get('/checkup',function(req,res){
   var commands_filtered = Object.keys(commands).filter((key) =>  key != 'hints' && key != 'bypass').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
   //commands_filtered={}
   res.render('checkup',{level_commands: commands_filtered})
+  //res.sendFile(path.join(__dirname+'/html/checkout.html'));
+  //__dirname : It will resolve to your project folder.
+});
+router.get('/dmx',function(req,res){
+  var commands_filtered = Object.keys(commands).filter((key) =>  key != 'hints' && key != 'bypass').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
+  //commands_filtered={}
+  res.render('dmx_tests',{dmx_universes: dmx_universes})
   //res.sendFile(path.join(__dirname+'/html/checkout.html'));
   //__dirname : It will resolve to your project folder.
 });
@@ -114,6 +123,14 @@ app.post("/send_command", (req, res) => {
       status: 'ok'
    }])
 })
+
+app.post("/set_dmx", (req, res) => {
+  json=req.body
+  setDMX(json.ip,json.universe,json.number_of_channels,json.value)
+   res.json([{
+      status: 'ok'
+   }])
+})
 //curl 10.0.0.241:3000/stream_commands --no-buffer
 app.get("/stream_commands", (req, res) => {
     res.set({
@@ -156,7 +173,6 @@ const port = 3000;
 server.listen(port);
 console.debug('Server listening on port ' + port);
 
-const commands= require('./commands.json')
 var logs=""
 
 /*--------SOCKET IO Server ----------*/
@@ -306,7 +322,7 @@ function generate_debug_data(){
 //   console.log(JSON.stringify(rpis_status))
 // }
 //setInterval(output,2000);
-if(true){ //set to true for production
+if(false){ //set to true for production
   restart_all_controllers();
   checkup()
   setInterval(checkup,10000);
@@ -380,6 +396,16 @@ function restart_all_controllers(){
   //   });
 });
 
+}
+function setDMX(ip,universe,number_of_channels,value){
+  sender=dmxnet.newSender({ip: ip, //IP to send to, default 255.255.255.255
+  subnet: 0, //Destination subnet, default 0
+  universe: universe, //Destination universe, default 0
+  net: 0, //Destination net, default 0
+  port: 6454, //Destination UDP Port, default 6454
+  base_refresh_interval: 1000 // Default interval for sending unchanged ArtDmx
+  });
+  sender.fillChannels(0,number_of_channels-1,value);
 }
 
 

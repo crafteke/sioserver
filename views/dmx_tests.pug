@@ -1,0 +1,32 @@
+html
+  head
+    style
+      include ../css/spectre.min.css
+      include ../css/spectre-exp.min.css
+      include ../css/spectre-icons.min.css
+    script(src='jquery-3.6.0.min.js')
+    script(src='dmx_test.js')
+  body
+    div(class='container')
+      ul(class="tab tab-block")
+        li(class="tab-item")
+          a(href="/dashboard") Services
+        li(class="tab-item")
+          a(href="/checkup",class="") Checkup
+        li(class="tab-item active")
+          a(href="/dmx",class="active") DMX
+      div(class='columns')
+        div(class='column col-10')
+            br
+            table(class='table table-striped table-hover')
+              thead
+                th(width='15%') Description
+                th(width='15%') #channels
+                th Action
+                tbody
+                each dmx in dmx_universes
+                  tr
+                    td=dmx.name
+                    td=dmx.channels
+                    td
+                      button(class="btn btn-primary", data-ip=dmx.ip,data-value=255,data-universe=dmx.universe,data-channels=dmx.channels) On
