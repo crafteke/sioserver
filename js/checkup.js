@@ -15,13 +15,16 @@
     stream=new TextDecoder().decode(value)
     jsons=stream.split('\n')
     jsons.forEach((item, i) => {
-      json=JSON.parse(item);
-      //refreshServicesStatus(json)
-      console.log(JSON.stringify(json));
-      td_element=$('tr#'+json.controller_id+' td[data-value='+json.value+'] span')
-      td_element.removeClass("label-error")
-      td_element.addClass("label-success")
-      console.log("id",json.controller_id,"val",json.value)
+      if(isJsonString(item)){
+        json=JSON.parse(item);
+        //refreshServicesStatus(json)
+        //console.log(JSON.stringify(json));
+        td_element=$('tr#'+json.controller_id+' td[data-value='+json.value+'] span')
+        td_element.removeClass("label-error")
+        td_element.addClass("label-success")
+        //console.log("id",json.controller_id,"val",json.value)
+      }
+
     });
     }
     catch(error){
@@ -31,6 +34,14 @@
   //$('#stream').html(new TextDecoder().decode(value));
   }
 })();
+function isJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
 $(document).ready(function () {
 
 $("select").change(function (event) {

@@ -22,11 +22,20 @@ html
               thead
                 th(width='15%') Description
                 th(width='15%') #channels
-                th Action
+                th(width='10%') Action
+                th(width='10%') Tested
+
                 tbody
                 each dmx in dmx_universes
                   tr
                     td=dmx.name
                     td=dmx.channels
                     td
-                      button(class="btn btn-primary", data-ip=dmx.ip,data-value=255,data-universe=dmx.universe,data-channels=dmx.channels) On
+                      div(class="form-group")
+                        div(class="btn-group btn-group-block")
+                          button(class="btn btn-primary ",onclick="click_action(this)", data-ip=dmx.ip,data-value=0,data-universe=dmx.universe,data-channels=dmx.channels) Off
+                          button(class="btn",onclick="click_action(this)", data-ip=dmx.ip,data-value=255,data-universe=dmx.universe,data-channels=dmx.channels) On
+                    td
+                      label(class="form-checkbox")
+                        input(type="checkbox")
+                        i(class="form-icon")

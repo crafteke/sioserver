@@ -47,6 +47,7 @@ router.get('/',function(req,res){
 });
 router.get('/cameras',function(req,res){
   res.sendFile(path.join(__dirname+'/html/camera.html'));
+  //res.sendFile(path.join(__dirname+'/html/webrtc.html'));
   //__dirname : It will resolve to your project folder.
 });
 router.get('/dashboard',function(req,res){
@@ -126,7 +127,8 @@ app.post("/send_command", (req, res) => {
 
 app.post("/set_dmx", (req, res) => {
   json=req.body
-  setDMX(json.ip,json.universe,json.number_of_channels,json.value)
+  console.log("-----",req.body)
+  setDMX(json.ip,json.universe,json.channels,json.value)
    res.json([{
       status: 'ok'
    }])
@@ -405,7 +407,10 @@ function setDMX(ip,universe,number_of_channels,value){
   port: 6454, //Destination UDP Port, default 6454
   base_refresh_interval: 1000 // Default interval for sending unchanged ArtDmx
   });
-  sender.fillChannels(0,number_of_channels-1,value);
+  //sender.setChannel(3,value);
+  console.log("channn",number_of_channels)
+  sender.fillChannels(0,number_of_channels,value);
+  sender.transmit();
 }
 
 
