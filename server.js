@@ -11,11 +11,11 @@ const commands= require('./commands.json')
 const dmx_universes=require('./dmx_universes.json')
 //write a all blink method that set all channels to 255 on everybody
 const rpi_services={'liftpi':["controller","dmx2pwm"],
-'halpi':['controller','dmx2pwm'],
-'counterpadpi':['controller'],
-'lockerspi':['controller','dmx2pwm','elwire_controller'],
+'halpi':['controller','dmx2pwm','uv4l_raspicam'],
+'counterpadpi':['controller','uv4l_raspicam'],
+'lockerspi':['controller','dmx2pwm','elwire_controller','uv4l_raspicam'],
 'rfidpi':['controller','dmx2pwm'],
-'incalpi':['controller','dmx2pwm','incal_animator'],
+'incalpi':['controller','dmx2pwm','incal_animator','uv4l_raspicam'],
 'roofpi':['dmxspi'],
 'room01lightpi':['dmx2pwm']}
 const hosts_ip={'roofpi':'10.0.0.238','rfidpi':'10.0.0.211','incalpi':'10.0.0.213',
@@ -323,7 +323,8 @@ function generate_debug_data(){
 //   console.log(JSON.stringify(rpis_status))
 // }
 //setInterval(output,2000);
-if(false){ //set to true for production
+var ONLINE_MODE=true;
+if(ONLINE_MODE){ //set to true for production
   restart_all_controllers();
   checkup()
   setInterval(checkup,10000);

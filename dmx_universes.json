@@ -1,4 +1,6 @@
 [{"name":"0-maglock-alarm-Smallworld box-caissonAB","ip":"10.0.0.214","universe":"0","channels":18},
 {"name":"1-Smallworld-elwire","ip":"10.0.0.214","universe":"1","channels":8},
 {"name":"room1 lights","ip":"10.0.0.216","universe":"6","channels":9},
-{"name":"rfid elwire button","ip":"10.0.0.211","universe":"2","channels":7}]
+{"name":"rfid elwire button","ip":"10.0.0.211","universe":"2","channels":7},
+{"name":"hal motherboard","ip":"10.0.0.210","universe":3,"channels":7},
+{"name":"lift","ip":"10.0.0.215","universe":4,"channels":7}]
