@@ -127,7 +127,6 @@ app.post("/send_command", (req, res) => {
 
 app.post("/set_dmx", (req, res) => {
   json=req.body
-  console.log("-----",req.body)
   setDMX(json.ip,json.universe,json.channels,json.value)
    res.json([{
       status: 'ok'
@@ -399,18 +398,26 @@ function restart_all_controllers(){
 });
 
 }
+
 function setDMX(ip,universe,number_of_channels,value){
-  sender=dmxnet.newSender({ip: ip, //IP to send to, default 255.255.255.255
-  subnet: 0, //Destination subnet, default 0
-  universe: universe, //Destination universe, default 0
-  net: 0, //Destination net, default 0
-  port: 6454, //Destination UDP Port, default 6454
-  base_refresh_interval: 1000 // Default interval for sending unchanged ArtDmx
-  });
+  var sender=dmxnet.newSender({ip: ip, //IP to send to, default 255.255.255.255
+    subnet: 0, //Destination subnet, default 0
+    universe: universe, //Destination universe, default 0
+    net: 0, //Destination net, default 0
+    port: 6454, //Destination UDP Port, default 6454
+    base_refresh_interval: 0 // Default interval for sending unchanged ArtDmx
+    });
+  console.log("Setting dmx:",ip,"-",number_of_channels,"-",value)
   //sender.setChannel(3,value);
-  console.log("channn",number_of_channels)
+
   sender.fillChannels(0,number_of_channels,value);
   sender.transmit();
+  setTimeout(function() {
+  sender.stop();
+  }, 2000);
+  // if(value==0){
+  //   sender.reset();
+  // }
 }
 
 
