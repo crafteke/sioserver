@@ -411,7 +411,7 @@ function setDMX(ip,universe,number_of_channels,value){
   console.log("Setting dmx:",ip,"-",number_of_channels,"-",value)
   //sender.setChannel(3,value);
 
-  sender.fillChannels(0,number_of_channels,value);
+  sender.fillChannels(0,number_of_channels-1,value);
   sender.transmit();
   setTimeout(function() {
   sender.stop();

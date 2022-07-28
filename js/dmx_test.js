@@ -8,6 +8,7 @@ $(document).ready(function () {
     var universe=$(btn).data('universe')
     var channels=$(btn).data('channels')
     var value=$(btn).data('value')
+    //if().hasClass( "foo" )
     $(btn).toggleClass('btn-primary')
     $(btn).siblings().toggleClass('btn-primary')
     // if(value==255){
