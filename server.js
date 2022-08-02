@@ -18,6 +18,7 @@ const rpi_services={'liftpi':["controller","dmx2pwm"],
 'incalpi':['controller','dmx2pwm','incal_animator','uv4l_raspicam'],
 'roofpi':['dmxspi'],
 'room01lightpi':['dmx2pwm'],
+'watchpi':['uv4l_raspicam'],
 'cubepi':['controller']}
 const hosts_ip={'roofpi':'10.0.0.238','rfidpi':'10.0.0.211','incalpi':'10.0.0.213',
 'lockerspi':'10.0.0.214','liftpi':'10.0.0.215','room01lightpi':'10.0.0.216',
