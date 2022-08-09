@@ -4,7 +4,9 @@ const path = require('path');
 var events = require('events');
 var event_emitter = new events.EventEmitter();
 const app = express();
+const util = require('node:util');
 const { exec } = require("child_process");
+const exec_async = util.promisify(require('node:child_process').exec);
 var dmxlib=require('dmxnet');
 var dmxnet = new dmxlib.dmxnet();
 const commands= require('./commands.json')
@@ -18,6 +20,7 @@ const rpi_services={'liftpi':["controller","dmx2pwm"],
 'incalpi':['controller','dmx2pwm','incal_animator','uv4l_raspicam'],
 'roofpi':['dmxspi'],
 'room01lightpi':['dmx2pwm'],
+'watchpi':['uv4l_raspicam'],
 'cubepi':['controller']}
 const hosts_ip={'roofpi':'10.0.0.238','rfidpi':'10.0.0.211','incalpi':'10.0.0.213',
 'lockerspi':'10.0.0.214','liftpi':'10.0.0.215','room01lightpi':'10.0.0.216',
@@ -96,23 +99,12 @@ app.get('/restart_service/:service',(req,res)=>{
      status: 'ok'
   }])
 })
-app.get('/get_journal/:service',(req,res)=>{
+app.get('/get_journal/:service',async (req,res)=>{
   var service = req.params.service
   console.log("Get journal request:"+service)
   service = service.split('-')
-  getlogs_rpi_service(service[0],service[1])
-  // var result = await return new Promise((resolve, reject) => {
-  //   getlogs_rpi_service(service[0],service[1],(successResponse) => {
-  //       resolve(successResponse);
-  //   }, (errorResponse) => {
-  //       reject(errorResponse);
-  //   });
-  // });
-  event_emitter.on("journalctl_event", (data) => {
-  res.json({
-     content: data
-   })
-  })
+  var logs = await getlogs_rpi_service(service[0],service[1])
+  res.json({content:logs})
 })
 
 
@@ -352,19 +344,11 @@ function restart_rpi_service(rpi,service){
 }
 
 
-function getlogs_rpi_service(rpi,service){
-   exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'journalctl -u "+ service +".service | tail -n200'", (error, stdout, stderr) => {
-      if (error) {
-          console.log(`error: ${error.message}`);
-          return;
-      }
-      if (stderr) {
-          console.log(`stderr: ${stderr}`);
-          return;
-      }
-      event_emitter.emit('journalctl_event',stdout)
-      return(stdout);
-    })
+async function getlogs_rpi_service(rpi,service){
+  const { stdout, stderr } = await exec_async("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'journalctl -u "+ service +".service | tail -n200'")
+   //console.log(stdout)
+   logs=stdout+stderr //will do better one day
+   return logs
 }
 // function getlogs_rpi_service(rpi,services,successCallback, errorCallback){
 //    exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'journalctl -u "+ service +".service | tail -n200'", (error, stdout, stderr) => {
