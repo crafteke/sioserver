@@ -1,6 +1,12 @@
-[{"name":"0-maglock-alarm-Smallworld box-caissonAB","ip":"10.0.0.214","universe":"0","channels":18},
-{"name":"1-Smallworld-elwire","ip":"10.0.0.214","universe":"1","channels":8},
-{"name":"room1 lights","ip":"10.0.0.216","universe":"6","channels":9},
-{"name":"rfid elwire button","ip":"10.0.0.211","universe":"2","channels":7},
-{"name":"hal motherboard","ip":"10.0.0.210","universe":3,"channels":7},
-{"name":"lift","ip":"10.0.0.215","universe":4,"channels":7}]
+[{"name":"lift","ip":"10.0.0.215","universe":4,"channels":7},
+  {"name":"hal motherboard","ip":"10.0.0.210","universe":3,"channels":7},
+  {"name":"hal fan","ip":"10.0.0.210","universe":10,"channels":2},
+  {"name":"room1 lights","ip":"10.0.0.216","universe":"6","channels":9},
+  {"name":"room2 rfid elwire button","ip":"10.0.0.211","universe":"2","channels":7},
+    {"name":"room3 smook","ip":"10.0.0.213","universe":"10","channels":3},
+    {"name":"room3 incal","ip":"10.0.0.213","universe":"1","channels":21},
+  {"name":"room4 light room3 cube","ip":"10.0.0.213","universe":11,"channels":2},
+{"name":"maglock-alarm-Smallworld box-caissonAB","ip":"10.0.0.214","universe":"0","channels":18},
+{"name":"Smallworld-elwire","ip":"10.0.0.214","universe":"1","channels":8},
+{"name":"roof1","ip":"10.0.0.238","universe":"1","channels":512},
+{"name":"roof2","ip":"10.0.0.238","universe":"2","channels":512}]
