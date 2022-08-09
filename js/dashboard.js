@@ -103,7 +103,12 @@ function click_restart(btn){
   var service = $(btn).data('rpi-service')
   $.get('/restart_service/'+service,function(data){console.log('ok')})
 }
-
+function close_logs_modal(){
+  $("#modal-logs").toggleClass("active");
+  $("#log_content").html("");
+  $("#log_content").addClass("loading loading-lg");
+  $("#log_title").html("Loading...")
+}
 $(document).ready(function () {
   //setInterval("getcheckout()", 2000);
 });
