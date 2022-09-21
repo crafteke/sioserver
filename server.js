@@ -49,9 +49,12 @@ router.get('/',function(req,res){
   res.sendFile(path.join(__dirname+'/html/index.html'));
   //__dirname : It will resolve to your project folder.
 });
-router.get('/cameras',function(req,res){
-  res.sendFile(path.join(__dirname+'/html/camera.html'));
-  //res.sendFile(path.join(__dirname+'/html/webrtc.html'));
+router.get('/masterize',function(req,res){
+  //res.sendFile(path.join(__dirname+'/html/camera.html'));
+  var commands_filtered = Object.keys(commands).filter((key) =>  key == 'hints' || key == 'bypass').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
+  //commands_filtered={}
+  res.render('masterize',{level_commands: commands_filtered})
+
   //__dirname : It will resolve to your project folder.
 });
 router.get('/dashboard',function(req,res){
@@ -113,6 +116,16 @@ app.post("/send_command", (req, res) => {
   console.log("Sending command:",req.body);
   event_emitter.emit('SIO_Command',req.body)
     io.emit("Command",req.body);
+   res.json([{
+      status: 'ok'
+   }])
+})
+app.post("/shutdown_control", (req, res) => {
+  console.log("Shutdowning computer.",req.body);
+//exec(`export MSYS_NO_PATHCONV=1;shutdown /s /f /t 0`, (error, stdout, stderr) => {
+  exec(`echo "bobouboub"`, (error, stdout, stderr) => {
+      return stdout=='ok'
+    })
    res.json([{
       status: 'ok'
    }])

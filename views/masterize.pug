@@ -1,0 +1,55 @@
+html
+  head
+    style
+      include ../css/spectre.min.css
+      include ../css/spectre-exp.min.css
+      include ../css/spectre-icons.min.css
+      include ../css/masterize.css
+    script(src='jquery-3.6.0.min.js')
+    script(src='masterize.js')
+  body
+    div(class='container')
+      ul(class="tab tab-block")
+        li(class="tab-item")
+          a(href="/dashboard") Services
+        li(class="tab-item active")
+          a(href="/checkup",class="active") Checkup
+        li(class="tab-item")
+          a(href="/dmx",class="") DMX
+      div(class='columns')
+        div(class='column col-1')
+          button(class='btn btn-success') Start game
+        div(class='column col-1')
+          button(class='btn btn-error') Stop game
+        div(class='column col-1')
+          button(class='btn btn-error',id="shutdown_control") Shutdown
+      div(class='columns')
+        each commands,level in level_commands
+          div(class='column col-6')
+            h4=level
+            table(class='table table-striped table-hover')
+              thead
+                th(width='15%') Command
+                th Trigger
+              tbody
+              each values, command in commands
+                tr(id=command)
+                  td=command
+                  td
+                    div(class="form-group")
+                      select(class="form-select")
+                        option(value='none',selected='') None
+                        each value,key in values
+                          option(data-controller_id=command,value=value) #{key}
+    div(class='container')
+      ul(class="step")
+        li(class="step-item")
+          a(href="#" class="tooltip" data-tooltip="Step 1") step 1
+        li(class="step-item")
+          a(href="#" class="tooltip" data-tooltip="Step 2") step 2
+    div(class='container')
+      img(class="zoom img-responsive",src="http://halpi.local:8080/stream/video.mjpeg")
+      img(class="zoom img-responsive",src="http://counterpadpi.local:8080/stream/video.mjpeg")
+      img(class="zoom img-responsive",src="http://lockerspi.local:8080/stream/video.mjpeg")
+      img(class="zoom img-responsive",src="http://incalpi.local:8080/stream/video.mjpeg")
+      iframe(class="zoom video-responsive" src="http://watchpi.local:8888/")

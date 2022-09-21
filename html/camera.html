@@ -11,25 +11,35 @@ img{
  width: auto;
 
 }
+.zoom {
+  padding: 50px;
+  /* background-color: green; */
+  transition: transform .2s; /* Animation */
+  width: 640px;
+  height: 360px;
+  margin: 0 auto;
+}
+
+.zoom:hover {
+  transform: scale(2); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
 
 
 </style>
 <body>
 <table>
 <tr>
-  <td><img src="http://halpi:8080/stream/video.mjpeg" alt="image"></td>
-  <td><img src="http://counterpadpi:8080/stream/video.mjpeg" alt="image"></td>
+  <td><img class="zoom" src="http://halpi:8080/stream/video.mjpeg" alt="image"></td>
+  <td><img class="zoom" src="http://counterpadpi:8080/stream/video.mjpeg" alt="image"></td>
     </tr>
     <tr>
-      <td><img src="http://lockerspi.local:8080/stream/video.mjpeg" alt="image"></td>
+      <td><img class="zoom" src="http://lockerspi.local:8080/stream/video.mjpeg" alt="image"></td>
       <!-- <td><img src="http://watchpi.local:8080/stream/video.mjpeg" alt="image"></td> -->
     </tr>
     <tr>
-      <td><img src="http://incalpi.local:8080/stream/video.mjpeg" alt="image"></td>
+      <td><img class="zoom" src="http://incalpi.local:8080/stream/video.mjpeg" alt="image"></td>
 
     </tr>
   </table>
-
-
 </body>
 </html>
