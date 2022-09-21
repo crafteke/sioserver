@@ -122,8 +122,11 @@ app.post("/send_command", (req, res) => {
 })
 app.post("/shutdown_control", (req, res) => {
   console.log("Shutdowning computer.",req.body);
-//exec(`export MSYS_NO_PATHCONV=1;shutdown /s /f /t 0`, (error, stdout, stderr) => {
-  exec(`echo "bobouboub"`, (error, stdout, stderr) => {
+  exec(`shutdown /s /f /t 0`, (error, stdout, stderr) => {
+    console.log(error)
+    console.log(stdout)
+    console.log(stderr)
+  //exec(`echo "bobouboub"`, (error, stdout, stderr) => {
       return stdout=='ok'
     })
    res.json([{
