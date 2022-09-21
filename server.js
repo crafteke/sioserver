@@ -133,6 +133,18 @@ app.post("/shutdown_control", (req, res) => {
       status: 'ok'
    }])
 })
+app.post("/start_unity", (req, res) => {
+  console.log("Starting unity.",req.body);
+
+  exec(`start /s /f /t 0`, (error, stdout, stderr) => {
+      console.log(error)
+      console.log(stdout)
+      console.log(stderr)
+    })
+   res.json([{
+      status: 'ok'
+   }])
+})
 
 app.post("/set_dmx", (req, res) => {
   json=req.body
