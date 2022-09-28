@@ -7,14 +7,8 @@ html
     script(src='jquery-3.6.0.min.js')
     script(src='dashboard.js')
   body
-    div(class='container')
-      ul(class="tab tab-block")
-        li(class="tab-item active")
-          a(href="/dashboard",class="active") Services
-        li(class="tab-item")
-          a(href="/checkup") Checkup
-        li(class="tab-item")
-          a(href="/dmx",class="") DMX
+      include menu.pug
+
       div(class='columns')
         div(class='column col-8')
           each services, rpi in rpi_services

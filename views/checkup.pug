@@ -7,14 +7,7 @@ html
     script(src='jquery-3.6.0.min.js')
     script(src='checkup.js')
   body
-    div(class='container')
-      ul(class="tab tab-block")
-        li(class="tab-item")
-          a(href="/dashboard") Services
-        li(class="tab-item active")
-          a(href="/checkup",class="active") Checkup
-        li(class="tab-item")
-          a(href="/dmx",class="") DMX
+      include menu.pug
       div(class='columns')
         div(class='column col-10')
             br

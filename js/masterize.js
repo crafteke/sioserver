@@ -21,5 +21,46 @@ $( "#start_unity" ).click(function() {
        //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
      });
 });
+$( "#start_game" ).click(function() {
+  $.post("/send_command",
+     {
+       controller_id:"lift_button_start",
+       value:"1"
+     },
+     function (data, status) {
+       console.log("starting game.");
+       //console.log("timer started.")
+       //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
+     });
+});
+$( "#stop_game" ).click(function() {
+  $.post("/send_command",
+     {
+       controller_id:"stop_game",
+       value:"1"
+     },
+     function (data, status) {
+       console.log("Stoping game session.");
+       //console.log("timer started.")
+       //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
+     });
+});
+
+$("select.selectable").change(function (event) {
+  element=$(this).children("option:selected")
+   controller_id=element.data('controller_id')
+   value=element.val()
+   action_text=element.text()
+   $.post("/send_command",
+      {
+         controller_id:controller_id,
+         value:value
+      },
+      function (data, status) {
+        console.log("sending command:",controller_id)
+        //$("#logs_content").prepend("Command sent - "+controller_id+" : "+action_text+"<br>");
+      });
+    $(this).val('none')
+});
   //setInterval("getcheckout()", 2000);
 });
