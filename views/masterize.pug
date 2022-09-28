@@ -8,23 +8,17 @@ html
     script(src='jquery-3.6.0.min.js')
     script(src='masterize.js')
   body
-    div(class='container')
-      ul(class="tab tab-block")
-        li(class="tab-item")
-          a(href="/dashboard") Services
-        li(class="tab-item active")
-          a(href="/checkup",class="active") Checkup
-        li(class="tab-item")
-          a(href="/dmx",class="") DMX
-      div(class='columns')
-        div(class='column col-1')
-          button(class='btn btn-success') Start game
-        div(class='column col-1')
-          button(class='btn btn-error') Stop game
-        div(class='column col-1')
-          button(class='btn btn-error',id="shutdown_control") Shutdown
-        div(class='column col-1')
-          button(class='btn btn-success',id="start_unity") Start Engine
+      include menu.pug
+      div(class='container columns')
+        div(class='columns col-6 col-gapless')
+          div(class='column ')
+            button(class='btn btn-success',id="start_game") Start game
+          div(class='column ')
+            button(class='btn btn-error',id="stop") Stop game
+          div(class='column ')
+            button(class='btn btn-error',id="shutdown_control") System shutdown
+          div(class='column ')
+            button(class='btn btn-success',id="start_unity") Start Engine
       div(class='columns')
         each commands,level in level_commands
           div(class='column col-6')
@@ -39,19 +33,20 @@ html
                   td=command
                   td
                     div(class="form-group")
-                      select(class="form-select")
-                        option(value='none',selected='') None
+                      select(class="form-select selectable")
+                        option(value='none',selected='',class="select_none") Select an option
                         each value,key in values
                           option(data-controller_id=command,value=value) #{key}
-    div(class='container')
-      ul(class="step")
-        li(class="step-item")
-          a(href="#" class="tooltip" data-tooltip="Step 1") step 1
-        li(class="step-item")
-          a(href="#" class="tooltip" data-tooltip="Step 2") step 2
-    div(class='container')
-      img(class="zoom img-responsive",src="http://halpi.local:8080/stream/video.mjpeg")
-      img(class="zoom img-responsive",src="http://counterpadpi.local:8080/stream/video.mjpeg")
-      img(class="zoom img-responsive",src="http://lockerspi.local:8080/stream/video.mjpeg")
-      img(class="zoom img-responsive",src="http://incalpi.local:8080/stream/video.mjpeg")
-      iframe(class="zoom video-responsive" src="http://watchpi.local:8888/")
+      div(class='container')
+        img(class="zoom img-responsive",src="http://halpi.local:8080/stream/video.mjpeg")
+        img(class="zoom img-responsive",src="http://counterpadpi.local:8080/stream/video.mjpeg")
+        img(class="zoom img-responsive",src="http://lockerspi.local:8080/stream/video.mjpeg")
+        img(class="zoom img-responsive",src="http://incalpi.local:8080/stream/video.mjpeg")
+        iframe(class="zoom video-responsive" src="http://watchpi.local:8888/")
+        //-
+              div(class='container')
+                ul(class="step")
+                  li(class="step-item")
+                    a(href="#" class="tooltip" data-tooltip="Step 1") step 1
+                  li(class="step-item")
+                    a(href="#" class="tooltip" data-tooltip="Step 2") step 2

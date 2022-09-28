@@ -53,26 +53,26 @@ router.get('/masterize',function(req,res){
   //res.sendFile(path.join(__dirname+'/html/camera.html'));
   var commands_filtered = Object.keys(commands).filter((key) =>  key == 'hints' || key == 'bypass').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
   //commands_filtered={}
-  res.render('masterize',{level_commands: commands_filtered})
+  res.render('masterize',{title:'masterize',level_commands: commands_filtered})
 
   //__dirname : It will resolve to your project folder.
 });
 router.get('/dashboard',function(req,res){
-  res.render('dashboard',{rpi_services: rpi_services})
+  res.render('dashboard',{title:'dashboard',rpi_services: rpi_services})
   //res.sendFile(path.join(__dirname+'/html/checkout.html'));
   //__dirname : It will resolve to your project folder.
 });
 router.get('/checkup',function(req,res){
   var commands_filtered = Object.keys(commands).filter((key) =>  key != 'hints' && key != 'bypass').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
   //commands_filtered={}
-  res.render('checkup',{level_commands: commands_filtered})
+  res.render('checkup',{title:'checkup',level_commands: commands_filtered})
   //res.sendFile(path.join(__dirname+'/html/checkout.html'));
   //__dirname : It will resolve to your project folder.
 });
 router.get('/dmx',function(req,res){
   var commands_filtered = Object.keys(commands).filter((key) =>  key != 'hints' && key != 'bypass').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
   //commands_filtered={}
-  res.render('dmx_tests',{dmx_universes: dmx_universes})
+  res.render('dmx_tests',{title:'dmx_tests',dmx_universes: dmx_universes})
   //res.sendFile(path.join(__dirname+'/html/checkout.html'));
   //__dirname : It will resolve to your project folder.
 });

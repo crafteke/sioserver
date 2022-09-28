@@ -7,7 +7,6 @@ function getlogs(){
   })
 }
 $(document).ready(function () {
-
    $('#start_counter').click(function(event){
      $.post("/send_command",
         {
