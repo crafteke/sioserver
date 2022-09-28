@@ -136,7 +136,7 @@ app.post("/shutdown_control", (req, res) => {
 app.post("/start_unity", (req, res) => {
   console.log("Starting unity.",req.body);
 
-  exec(`start /s /f /t 0`, (error, stdout, stderr) => {
+  exec(`start C:\\Users\\Crafteke\\Desktop\\Dystopia220921\\Face6.exe`, (error, stdout, stderr) => {
       console.log(error)
       console.log(stdout)
       console.log(stderr)
@@ -370,7 +370,21 @@ function restart_rpi_service(rpi,service){
       console.log(`${rpi} service ${service} Restarted. ${stdout}`);
     })
 }
-
+function shutdown_rpis(){
+  rpi_services.forEach(rpi=>{
+  exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'sudo halt'", (error, stdout, stderr) => {
+      if (error) {
+          console.log(`error: ${error.message}`);
+          return;
+      }
+      if (stderr) {
+          console.log(`stderr: ${stderr}`);
+          return;
+      }
+      console.log(`${rpi} service shutdown. ${stdout}`);
+    })
+})
+}
 
 async function getlogs_rpi_service(rpi,service){
   const { stdout, stderr } = await exec_async("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'journalctl -u "+ service +".service | tail -n200'")
