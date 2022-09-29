@@ -344,7 +344,7 @@ function generate_debug_data(){
 //   console.log(JSON.stringify(rpis_status))
 // }
 //setInterval(output,2000);
-var ONLINE_MODE=true;
+var ONLINE_MODE=false;
 if(ONLINE_MODE){ //set to true for production
   restart_all_controllers();
   checkup()
