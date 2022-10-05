@@ -1,5 +1,6 @@
 $(document).ready(function () {
   $( "#shutdown_control" ).click(function() {
+    if (confirm("Really sure??")) {
     $.post("/shutdown_control",
        {
           confirm: "false",
@@ -9,17 +10,25 @@ $(document).ready(function () {
          //console.log("timer started.")
          //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
        });
+     }else {
+       console.log("Cancel halt system.");
+     }
 });
 $( "#start_unity" ).click(function() {
-  $.post("/start_unity",
-     {
-        args: "none",
-     },
-     function (data, status) {
-       console.log("starting unity.");
-       //console.log("timer started.")
-       //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
-     });
+  if (confirm("Really sure??")) {
+    $.post("/start_unity",
+       {
+          args: "none",
+       },
+       function (data, status) {
+         console.log("starting unity.");
+         //console.log("timer started.")
+         //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
+       });
+} else {
+  console.log("Cancel unity launch.");
+}
+
 });
 $( "#start_game" ).click(function() {
   $.post("/send_command",

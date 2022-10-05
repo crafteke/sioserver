@@ -122,7 +122,8 @@ app.post("/send_command", (req, res) => {
 })
 app.post("/shutdown_control", (req, res) => {
   console.log("Shutdowning computer.",req.body);
-
+  //halt_them_all()
+  //await getlogs_rpi_service("","")
   exec(`shutdown /s /f /t 0`, (error, stdout, stderr) => {
       return stdout=='ok'
     })
@@ -132,7 +133,6 @@ app.post("/shutdown_control", (req, res) => {
 })
 app.post("/start_unity", (req, res) => {
   console.log("Starting unity.",req.body);
-
   exec(`start /s /f /t 0`, (error, stdout, stderr) => {
       console.log(error)
       console.log(stdout)
@@ -375,6 +375,16 @@ async function getlogs_rpi_service(rpi,service){
    logs=stdout+stderr //will do better one day
    return logs
 }
+// async function halt_them_all(){
+//   const tasks=[]
+//   Object.entries(rpi_services).forEach(([rpi,services])=>
+//   {
+//     tasks.push(exec_async("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'sudo reboot'"));
+//   })
+// await Promise.all(tasks)
+//   return true
+// }
+
 // function getlogs_rpi_service(rpi,services,successCallback, errorCallback){
 //    exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'journalctl -u "+ service +".service | tail -n200'", (error, stdout, stderr) => {
 //       if (error) {
