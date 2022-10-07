@@ -54,6 +54,20 @@ $( "#stop_game" ).click(function() {
        //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
      });
 });
+$("#speech_action").click(function() {
+  msg=$("#input-speech").val()
+  $.post("/send_command",
+     {
+       controller_id:"speech_command",
+       value: msg
+     },
+     function (data, status) {
+       console.log("Speech command.");
+       //console.log("timer started.")
+       //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
+     });
+});
+
 
 $("select.selectable").change(function (event) {
   element=$(this).children("option:selected")

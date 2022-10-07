@@ -34,6 +34,9 @@ const hosts_ip={'roofpi':'10.0.0.238','rfidpi':'10.0.0.211','incalpi':'10.0.0.21
 // '10.0.0.213':['controller','dmx2pwm','incal_animator'],
 // '10.0.0.238':['dmxspi'],
 // '10.0.0.216':['dmx2pwm']}
+//FOR production set to true
+var ONLINE_MODE=false;
+
 let rpis_status={}
 
 app.use(express.urlencoded({ extended: true }));
@@ -45,15 +48,17 @@ app.use(express.static('css'));
 app.use(express.static('js'));
 app.set('view engine', 'pug');
 
-router.get('/',function(req,res){
+router.get('/v1',function(req,res){
   res.sendFile(path.join(__dirname+'/html/index.html'));
   //__dirname : It will resolve to your project folder.
 });
+router.get('/',function(req,res){
+  res.redirect('masterize')
+});
 router.get('/masterize',function(req,res){
-  //res.sendFile(path.join(__dirname+'/html/camera.html'));
-  var commands_filtered = Object.keys(commands).filter((key) =>  key == 'hints' || key == 'bypass').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
-  //commands_filtered={}
-  res.render('masterize',{title:'masterize',level_commands: commands_filtered})
+  var hints_filtered = Object.keys(commands).filter((key) => key == 'hints').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
+  var bypass_filtered = Object.keys(commands).filter((key) => key == 'bypass').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
+  res.render('masterize',{title:'masterize',hints_commands: hints_filtered,bypass_commands:bypass_filtered})
 
   //__dirname : It will resolve to your project folder.
 });
@@ -137,8 +142,7 @@ app.post("/shutdown_control", (req, res) => {
 })
 app.post("/start_unity", (req, res) => {
   console.log("Starting unity.",req.body);
-
-  exec(`start C:\\Users\\Crafteke\\Desktop\\Dystopia220921\\Face6.exe`, (error, stdout, stderr) => {
+  exec(`start C:\\Users\\Crafteke\\Desktop\\dystopia_latest\\Face6.exe`, (error, stdout, stderr) => {
       console.log(error)
       console.log(stdout)
       console.log(stderr)
@@ -165,7 +169,7 @@ app.get("/stream_commands", (req, res) => {
     });
     res.flushHeaders();
     event_emitter.on("SIO_Command", (data) => {
-        console.log('command event')
+        //console.log('command event')
         res.write(JSON.stringify(data)+'\n')
     });
     res.on("close", () => {
@@ -228,12 +232,13 @@ io.on('connection',  function (socket) {
   }
 )
   socket.on("Command", (data) => {
-      //log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
-      //console.log(log)
+      log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
+      console.log(log)
       // if(data.controller_id != "corridor_padled_state"){
       //   logs = log+"\n"+logs
       //   logs=logs.split("\n").slice(0,30).join("\n");
       // }
+      //commands_logs=Object.keys(data).filter((key) =>  key != 'corridor_padled_state' && key != 'hint_').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
       event_emitter.emit('SIO_Command',data)
       io.emit("Command",data)
       //socket.emit("beboop",json_message);
@@ -346,7 +351,6 @@ function generate_debug_data(){
 //   console.log(JSON.stringify(rpis_status))
 // }
 //setInterval(output,2000);
-var ONLINE_MODE=true;
 if(ONLINE_MODE){ //set to true for production
   restart_all_controllers();
   checkup()
