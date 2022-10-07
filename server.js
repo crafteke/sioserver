@@ -125,6 +125,13 @@ app.post("/send_command", (req, res) => {
       status: 'ok'
    }])
 })
+app.post("/send_speech", (req, res) => {
+  console.log("Sending speech:",req.body);
+    io.emit("Speech",req.body);
+   res.json([{
+      status: 'ok'
+   }])
+})
 app.post("/shutdown_control", (req, res) => {
   console.log("Shutdowning computer.",req.body);
   //halt_them_all()
@@ -232,8 +239,8 @@ io.on('connection',  function (socket) {
   }
 )
   socket.on("Command", (data) => {
-      log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
-      console.log(log)
+      //log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
+      //console.log(log)
       // if(data.controller_id != "corridor_padled_state"){
       //   logs = log+"\n"+logs
       //   logs=logs.split("\n").slice(0,30).join("\n");
@@ -243,6 +250,19 @@ io.on('connection',  function (socket) {
       io.emit("Command",data)
       //socket.emit("beboop",json_message);
 	});
+  // socket.on("Speech", (data) => {
+  //   console.log("Speech:"+data)
+  //     //log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
+  //     //console.log(log)
+  //     // if(data.controller_id != "corridor_padled_state"){
+  //     //   logs = log+"\n"+logs
+  //     //   logs=logs.split("\n").slice(0,30).join("\n");
+  //     // }
+  //     //commands_logs=Object.keys(data).filter((key) =>  key != 'corridor_padled_state' && key != 'hint_').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
+  //     //event_emitter.emit('SIO_Command',data)
+  //     io.emit("Speech",data)
+  //     //socket.emit("beboop",json_message);
+  // });
   socket.on("Register", (data) => {
 		  console.log("Registration received:"+data);
       clients[data.toLowerCase()]=socketId;

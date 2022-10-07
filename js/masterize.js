@@ -56,7 +56,7 @@ $( "#stop_game" ).click(function() {
 });
 $("#speech_action").click(function() {
   msg=$("#input-speech").val()
-  $.post("/send_command",
+  $.post("/send_speech",
      {
        controller_id:"speech_command",
        value: msg
@@ -67,7 +67,10 @@ $("#speech_action").click(function() {
        //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
      });
 });
-
+$("#speech_clear").click(function(){
+  $("#input-speech").val("");
+  console.log("Clear text")
+})
 
 $("select.selectable").change(function (event) {
   element=$(this).children("option:selected")
