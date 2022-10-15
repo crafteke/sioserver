@@ -35,7 +35,7 @@ const hosts_ip={'roofpi':'10.0.0.238','rfidpi':'10.0.0.211','incalpi':'10.0.0.21
 // '10.0.0.238':['dmxspi'],
 // '10.0.0.216':['dmx2pwm']}
 //FOR production set to true
-var ONLINE_MODE=true;
+var ONLINE_MODE=false;
 
 let rpis_status={}
 

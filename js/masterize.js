@@ -56,10 +56,12 @@ $( "#stop_game" ).click(function() {
 });
 $("#speech_action").click(function() {
   msg=$("#input-speech").val()
+  room_id=$("#input-speech-room").val()
   $.post("/send_speech",
      {
        controller_id:"speech_command",
-       value: msg
+       value: msg,
+       room: room_id
      },
      function (data, status) {
        console.log("Speech command.");
@@ -72,7 +74,7 @@ $("#speech_clear").click(function(){
   console.log("Clear text")
 })
 
-$("select.selectable").change(function (event) {
+$("select.command").change(function (event) {
   element=$(this).children("option:selected")
    controller_id=element.data('controller_id')
    value=element.val()

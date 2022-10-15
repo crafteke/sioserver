@@ -30,6 +30,13 @@ html
                     div(class="form-group")
                       label(class="form-label" for="input-speech") Message
                         textarea(class="form-input" id="input-speech" placeholder="Type your text" rows="3")
+                        select(id="input-speech-room" class="form-select selectable")
+                          option(value='1',selected='',class="select_none") HAL
+                          option(value='4',selected='',class="select_none") Corridor
+                          option(value='8',selected='',class="select_none") room 01
+                          option(value='6',selected='',class="select_none") room 02
+                          option(value='2',selected='',class="select_none") room 03
+                          option(value='7',selected='',class="select_none") room 04
                       button(class='float-right m-1 btn btn-primary' id="speech_action") Talk!
                       button(class='float-right m-1 btn btn-error' id="speech_clear") Clear
 
@@ -52,7 +59,7 @@ html
                             td=command
                             td
                               div(class="form-group")
-                                select(class="form-select selectable")
+                                select(class="form-select selectable command")
                                   option(value='none',selected='',class="select_none") Select an option
                                   each value,key in values
                                     option(data-controller_id=command,value=value) #{key}
@@ -70,7 +77,7 @@ html
                             td=command
                             td
                               div(class="form-group")
-                                select(class="form-select selectable")
+                                select(class="form-select selectable command")
                                   option(value='none',selected='',class="select_none") Select an option
                                   each value,key in values
                                     option(data-controller_id=command,value=value) #{key}
