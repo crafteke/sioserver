@@ -1,0 +1,5 @@
+enable
+enable-admin 
+configure 
+interface gigabitEthernet 1/0/4 
+shutdown

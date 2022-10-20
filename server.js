@@ -24,7 +24,7 @@ const rpi_services={'liftpi':["controller","dmx2pwm"],
 'cubepi':['controller']}
 const hosts_ip={'roofpi':'10.0.0.238','rfidpi':'10.0.0.211','incalpi':'10.0.0.213',
 'lockerspi':'10.0.0.214','liftpi':'10.0.0.215','room01lightpi':'10.0.0.216',
- 'halpi':'10.0.0.210','counterpadpi':'10.0.0.212','watchpi':'10.0.0.204',"cubepi":"10.0.0.201"}
+ 'halpi':'10.0.0.210','counterpadpi':'10.0.0.212','watchpi':'10.0.0.204','cubepi':'10.0.0.201'}
 
 // const rpi_services={'10.0.0.215':["controller","dmx2pwm"],
 // '10.0.0.210':['controller','dmx2pwm'],
@@ -35,7 +35,7 @@ const hosts_ip={'roofpi':'10.0.0.238','rfidpi':'10.0.0.211','incalpi':'10.0.0.21
 // '10.0.0.238':['dmxspi'],
 // '10.0.0.216':['dmx2pwm']}
 //FOR production set to true
-var ONLINE_MODE=false;
+var ONLINE_MODE=true;
 
 let rpis_status={}
 
@@ -132,11 +132,15 @@ app.post("/send_speech", (req, res) => {
       status: 'ok'
    }])
 })
-app.post("/shutdown_control", (req, res) => {
-  console.log("Shutdowning computer.",req.body);
+app.post("/shutdown_control", async (req, res) => {
+  console.log("Shutdowning computer and pis.",req.body);
+  //wait for all pis to be off
+  await asyncAllPiCommand('sudo halt');
+  //kill unity
+  //Taskkill.exe /IM "Face6.exe" /F
   //halt_them_all()
   //await getlogs_rpi_service("","")
-  exec(`shutdown /s /f /t 0`, (error, stdout, stderr) => {
+  await exec_async(`shutdown.exe /s /f /t 0`, (error, stdout, stderr) => {
     console.log(error)
     console.log(stdout)
     console.log(stderr)
@@ -149,6 +153,8 @@ app.post("/shutdown_control", (req, res) => {
 })
 app.post("/start_unity", (req, res) => {
   console.log("Starting unity.",req.body);
+  //for linux WSL
+  // /mnt/c/Users/Crafteke/Desktop/dystopia_latest/Face6.exe &
   exec(`start C:\\Users\\Crafteke\\Desktop\\dystopia_latest\\Face6.exe`, (error, stdout, stderr) => {
       console.log(error)
       console.log(stdout)
@@ -289,20 +295,33 @@ function check_clients(){
 }
 //setInterval(check_clients,2000);
 
-
-function ping(host){
-exec(`ping -c 1 ${host} > /dev/null && echo 'ok' ||  echo 'ko'`, (error, stdout, stderr) => {
-    return stdout=='ok'
-  })
-}
-//initialize
 Object.entries(rpi_services).forEach(([rpi,services])=>
 {
     rpis_status[rpi]={}
 })
+
+function check_ping(rpi){
+  //exec('ping -c 1 10.0.0.250').on('exit', code => console.log('final exit code is', code))
+// exec(`ping -c 1 ${hosts_ip[rpi]} > /dev/null && echo 'ok' ||  echo 'ko'`, (error, stdout, stderr) => {
+//       console.log('debuuuuuug:'+stdout=='ok')
+//      rpis_status[rpi]['ping']=(stdout=='ok')
+//   })
+  exec(`ping -c 1 ${hosts_ip[rpi]} > /dev/null`).on('exit', code => rpis_status[rpi]['ping']=(code==0))
+}
+function check_ssh_port(rpi){
+  exec(`timeout 5 bash -c "</dev/tcp/${hosts_ip[rpi]}/22"`).on('exit', code => rpis_status[rpi]['ssh']=(code==0))
+}
+
+//check system heatlh
 function checkup(){
+  Object.entries(hosts_ip).forEach(([rpi,ip])=>
+  {
+    check_ping(rpi);
+    check_ssh_port(rpi);
+  });
   Object.entries(rpi_services).forEach(([rpi,services])=>
   {
+      rpis_status[rpi]["services"]=[]
       services.forEach(service=>{
         //maybe add -i ~/.ssh/face6 or id_rsa
         var statuses_json={}
@@ -339,10 +358,10 @@ function checkup(){
               else{
                 statuses_json['sio_status']=false
               }
-              rpis_status[rpi][service]=statuses_json
+
+              rpis_status[rpi]["services"].push(statuses_json)
             });
           })
-
     })
 }
 function generate_debug_data(){
@@ -360,7 +379,7 @@ function generate_debug_data(){
         else{
           statuses_json['sio_status']=false
         }
-          rpis_status[rpi][service]=statuses_json
+          rpis_status[rpi]['services'][service]=statuses_json
         })
 
     })
@@ -396,20 +415,27 @@ function restart_rpi_service(rpi,service){
       console.log(`${rpi} service ${service} Restarted. ${stdout}`);
     })
 }
-function shutdown_rpis(){
-  rpi_services.forEach(rpi=>{
-  exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'sudo halt'", (error, stdout, stderr) => {
-      if (error) {
-          console.log(`error: ${error.message}`);
-          return;
-      }
-      if (stderr) {
-          console.log(`stderr: ${stderr}`);
-          return;
-      }
-      console.log(`${rpi} service shutdown. ${stdout}`);
-    })
-})
+// async function shutdown_rpis(){
+//   rpi_services.forEach(rpi=>{
+//   await exec_async("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'sudo halt'", (error, stdout, stderr) => {
+//       if (error) {
+//           console.log(`error: ${error.message}`);
+//       }
+//       if (stderr) {
+//           console.log(`stderr: ${stderr}`);
+//       }
+//       console.log(`${rpi} service shutdown. ${stdout}`);
+//     })
+// })
+// }
+async function asyncAllPiCommand(cmd){
+  rpi_names=Object.keys(hosts_ip);
+  promises=[]
+  for(index in rpi_names){
+  promises.push(exec_async("ssh -o \"StrictHostKeyChecking=no\" pi@"+rpi_names[index]+'.local'+ ' '+cmd))
+  // debugger;
+  }
+  await Promise.all(promises)
 }
 
 async function getlogs_rpi_service(rpi,service){
