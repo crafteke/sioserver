@@ -26,6 +26,8 @@ const hosts_ip={'roofpi':'10.0.0.238','rfidpi':'10.0.0.211','incalpi':'10.0.0.21
 'lockerspi':'10.0.0.214','liftpi':'10.0.0.215','room01lightpi':'10.0.0.216',
  'halpi':'10.0.0.210','counterpadpi':'10.0.0.212','watchpi':'10.0.0.204','cubepi':'10.0.0.201'}
 
+switch_ports={'roofpi':8,'rfidpi':18,'incalpi':14,'lockerspi':10,'liftpi':12,'room01lightpi':6,
+ 'halpi':4,'counterpadpi':16,'watchpi':46}
 // const rpi_services={'10.0.0.215':["controller","dmx2pwm"],
 // '10.0.0.210':['controller','dmx2pwm'],
 // '10.0.0.212':['controller'],
@@ -151,6 +153,23 @@ app.post("/shutdown_control", async (req, res) => {
       status: 'ok'
    }])
 })
+app.post("/powercyclepi", async (req, res) => {
+  console.log("Powercycling pi:",req.body[rpi]);
+  powerCyclePi(req.body[rpi])
+   res.json([{
+      status: 'ok'
+   }])
+})
+
+app.post("/restartpi", async (req, res) => {
+  console.log("Restarting pi:",req.body[rpi]);
+  powerCyclePi(req.body[rpi])
+   res.json([{
+      status: 'ok'
+   }])
+})
+
+
 app.post("/start_unity", (req, res) => {
   console.log("Starting unity.",req.body);
   //for linux WSL
@@ -437,7 +456,9 @@ async function asyncAllPiCommand(cmd){
   }
   await Promise.all(promises)
 }
-
+function powerCyclePi(rpi){
+    exec("./tplink_commands/reboot_int.sh 10.0.0.254 "+switch_ports[rpi])
+}
 async function getlogs_rpi_service(rpi,service){
   const { stdout, stderr } = await exec_async("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'journalctl -u "+ service +".service | tail -n200'")
    //console.log(stdout)

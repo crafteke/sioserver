@@ -39,16 +39,18 @@
 
         expect "(config-if)#"
 
-        send "shutdown\r"
+        #send "shutdown\r"
+				send "power inline supply disable\r"
 
         expect "(config-if)#"
 
-	sleep 5
+				sleep 30
+
         send "interface gigabitEthernet 1/0/$Interface\r"
 
         expect "(config-if)#"
-
-        send "no shutdown\r"
+				send "power inline supply enable\r"
+        #send "no shutdown\r"
         expect "(config-if)#"
 
         send "exit"

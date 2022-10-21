@@ -129,6 +129,31 @@ function close_logs_modal(){
   $("#log_title").html("Loading...")
 }
 $(document).ready(function () {
+  $("button.powercyclepi").click(function(){
+    var rpi=$(this).data('rpi');
+    $.post("/powercyclepi",
+       {
+          rpi:rpi
+       },
+       function (data, status) {
+         console.log('Powercycling:'+rpi);
+       });
+  })
+
+  //setInterval("getcheckout()", 2000);
+});
+$(document).ready(function () {
+  $("button.restartpi").click(function(){
+    var rpi=$(this).data('rpi');
+    $.post("/restartpi",
+       {
+          rpi:rpi
+       },
+       function (data, status) {
+         console.log('Powercycling:'+rpi);
+       });
+  })
+
   //setInterval("getcheckout()", 2000);
 });
 /*this is not working*/
