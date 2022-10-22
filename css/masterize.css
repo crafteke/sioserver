@@ -12,12 +12,25 @@
   z-index: -1;
 }
 
-.commands_ux{
+/* .commands_ux{
   position: sticky;
-	top: 40%;
+	bottom: 15px;
 }
 .speech_box{
   position: sticky;
-	top: 60%;
+	bottom: 15px;
   /* display:inline-block; */
+/*
+html, body {
+  height: 100%;
 }
+body {
+  display: flex;
+  flex-direction: column;
+}
+.content {
+  flex: 1 0 auto;
+}
+.commands_ux {
+  flex-shrink: 0;
+} */

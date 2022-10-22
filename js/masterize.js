@@ -1,4 +1,9 @@
 $(document).ready(function () {
+  $("#hint_button").click(function(){
+    console.log('modal hint clicked');
+    $("#modal-hints").toggleClass('active');
+  })
+
   $( "#shutdown_control" ).click(function() {
     if (confirm("Really sure??")) {
     $.post("/shutdown_control",
@@ -13,7 +18,7 @@ $(document).ready(function () {
      }else {
        console.log("Cancel halt system.");
      }
-});
+   });
 $( "#start_unity" ).click(function() {
   if (confirm("Really sure??")) {
     $.post("/start_unity",
@@ -27,9 +32,24 @@ $( "#start_unity" ).click(function() {
        });
 } else {
   console.log("Cancel unity launch.");
-}
+}});
+//TODO: harmonize this and other buttons
+$("button.command_button").click(function(){
+  var controller_id=$(this).data('controller_id');
+  var value = $(this).data('value');
+  if(value == undefined){
+    value='1'
+  }
+  $.post("/send_command",
+     {
+        controller_id:controller_id,
+        value:'1'
+     },
+     function (data, status) {
+       console.log('Control command triggered:'+controller_id+','+value);
+     });
+})
 
-});
 $( "#start_game" ).click(function() {
   $.post("/send_command",
      {
@@ -54,6 +74,21 @@ $( "#stop_game" ).click(function() {
        //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
      });
 });
+
+$("#language_select").change(function(event){
+  language_id=$("#language_select").val()
+  $.post("/send_command",
+     {
+       controller_id:"select_language",
+       value:language_id
+     },
+     function (data, status) {
+       console.log("Changing engine language to:",language_id);
+       //console.log("timer started.")
+       //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
+     });
+
+})
 $("#speech_action").click(function() {
   msg=$("#input-speech").val()
   room_id=$("#input-speech-room").val()
@@ -90,5 +125,5 @@ $("select.command").change(function (event) {
       });
     $(this).val('none')
 });
-  //setInterval("getcheckout()", 2000);
+
 });

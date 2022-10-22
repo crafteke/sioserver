@@ -1,0 +1,129 @@
+Concentrez vous sur les circuits clignotants,hint_hal,1
+Inutile de débrancher les fusibles des circuits validés.,hint_hal,2
+Faites attention au sens des connecteurs des fusibles.,hint_hal,3
+Il y a un fusible qui n’est pas à la bonne place.,hint_hal,4
+Vous devez appuyer sur le bouton à côté de la porte.,hint_hal,5
+Il vous manque des fusibles.,hint_hal,6
+Avez vous fouillé la veste du scientifique?,hint_hal,7
+Quelqu'un de votre équipe avait un fusible en main.,hint_hal,8
+N’avez vous pas égaré un fusible dans une des pièces?,hint_hal,9
+Avez-vous vérifié derrière les portes?,hint_hal,10
+Concentrez vous sur le premier circuit,hint_hal,11
+Concentrez vous sur le deuxième circuit,hint_hal,12
+Concentrez vous sur le troisième circuit.,hint_hal,13
+Vous devez retourner dans la salle des fusibles.,hint_hal,14
+"Vous avez fermé la porte, retournez sur vos pas.",hint_hal,15
+"La porte est ouverte, vous devez la pousser.",hint_hal,16
+Vous devez appuyer sur le bouton hack.,hint_keypad,1
+Vous devez utiliser la hacking box sur le dispositif d’ouverture de porte.,hint_keypad,2
+Le dispositif d’ouverture de porte est de nouveau fonctionnel.,hint_keypad,3
+Vous devez utiliser le dispositif d’ouverture de porte.,hint_keypad,4
+Vous devez entrer la bonne combinaison pour ouvrir une porte.,hint_keypad,5
+Vous devez entrer une combinaison en rapport avec le plafond.,hint_keypad,6
+La couleur des portes est en rapport avec les combinaisons aux plafonds.,hint_keypad,7
+La porte que vous devez ouvrir est de couleur verte.,hint_keypad,8
+La porte que vous devez ouvrir est de couleur rouge.,hint_keypad,9
+La porte que vous devez ouvrir est de couleur bleue.,hint_keypad,10
+La porte que vous devez ouvrir est de couleur blanche.,hint_keypad,11
+Cette porte n’est pas encore ouverte.,hint_keypad,12
+Vous devez brancher la hacking box.,hint_keypad,13
+Vous pouvez ouvrir une nouvelle porte.,hint_keypad,14
+Vous avez ouvert la porte du labo.,hint_keypad,15
+Vous avez ouvert la porte du core.,hint_keypad,16
+vous avez ouvert la porte du système.,hint_keypad,17
+vous avez ouvert la porte du build.,hint_keypad,18
+Vous devez ouvrir le labo.,hint_keypad,19
+Vous devez ouvrir le core.,hint_keypad,20
+Vous devez ouvrir le système.,hint_keypad,21
+Vous devez ouvrir le build.,hint_keypad,22
+La hacking box bip.,hint_keypad,23
+Le plafond a changé.,hint_keypad,24
+Il faut tirer plus fort la porte.,hint_keypad,25
+"La hacking box possède une fonctionnalité secondaire de synthèse musicale basée sur des codes en morse, cette fonctionnalité n’est pas utile à votre mission.",hint_keypad,26
+Vous devez communiquer entre le labo et cette pièce.,hint_room01,1
+Un de vous doit guider les autres grâce à la borne de contrôle dans le labos.,hint_room01,2
+Vous devez entrer une séquence de quatre couleurs.,hint_room01,3
+Il y a une table de conversion des symboles sur le caisson.,hint_room01,4
+Vous devez brancher un câble bleu.,hint_room01,5
+Vous devez brancher le câble rouge.,hint_room01,6
+Vous devez relier les longs câbles au caisson central.,hint_room01,7
+Vous devez chercher des symboles dans le caisson central.,hint_room01,8
+Avez-vous bien fouillé la veste du scientifique?,hint_room01,9
+Pour lancer le caisson rouge vous devez appuyer sur le gros bouton rouge lumineux.,hint_room01,10
+Pour lancer le caisson bleu vous devez appuyer sur le gros bouton bleu lumineux.,hint_room01,11
+Le caisson rouge commence en haut à gauche.,hint_room01,12
+Le caisson bleu commence en bas à droite.,hint_room01,13
+Le gros bouton rouge se trouve en haut à gauche du caisson rouge.,hint_room01,14
+Le gros bouton bleu se trouve en bas à droite du caisson bleu.,hint_room01,15
+Un des câbles est mal branché.,hint_room01,16
+les miroirs sont bien alignés,hint_room01,17
+Passez à la case suivante,hint_room01,18
+Passez au caisson suivant,hint_room01,19
+Concentrez vous sur le caisson du milieu.,hint_room01,20
+Le caisson violet est activé.,hint_room01,21
+Vous devez trouvez les symboles dans le caisson central.,hint_room01,22
+Vous devez communiquer les symboles à la borne de contrôle.,hint_room01,23
+Il y a un symbole qui clignote dans le caisson central.,hint_room01,24
+Il y a des stick de commande dans la borne de contrôle permettant de naviguer dans les caissons.,hint_room01,25
+Il y a un bouton sur la borne de contrôle permettant de changer de caisson.,hint_room01,26
+Vous devez commencer par rétablir la lumière.,hint_room02,1
+Vous devez trouver le fusible manquant permettant de rétablir la lumière.,hint_room02,2
+Vous devez lire le manuel.,hint_room02,3
+Commencer par l’étape une.,hint_room02,4
+Re-lisez l'étape une.,hint_room02,5
+Faite les étapes dans l’ordre.,hint_room02,6
+il vous manque des plaquettes.,hint_room02,7
+Les batteries sont collées entre elles.,hint_room02,8
+Vous devez connecter les plaquettes entre elles comme un puzzle.,hint_room02,9
+Les plaquettes doivent créer une connexion entre elles.,hint_room02,10
+Il n’y a qu’une possibilité.,hint_room02,11
+Je peux voir que la forme que vous avez créé n’est pas la bonne.,hint_room02,12
+Vous devez suivre les indications du manuel étape par étape.,hint_room02,13
+Avez-vous bien sélectionné toutes les cartes utiles à la conception du cube?,hint_room02,14
+Les cartes sont recto verso.,hint_room02,15
+"Certains symboles apparaissent plusieurs fois, vous devez choisir les plaquettes judicieusement.",hint_room02,16
+Vous devez commencer par construire le plan de création du cube.,hint_room02,17
+La référence 58B0 vous permet de trouver un des transparents du plan de création du cube.,hint_room02,18
+Il y a une table de correspondance sur le mur permettant de trouver les plans de création du cube.,hint_room02,19
+vous devez trouver à quelle place vont chaque plaquettes.,hint_room02,20
+Vous devez superposer trois transparents afin de créer le plan de création du cube.,hint_room02,21
+Il y a un fusible derrière la porte.,hint_room02,22
+Vous devez trouver les plaques de construction du cube positronique.,hint_room02,23
+Les plaques de construction du cube positronique se trouvent dans la table lumineuse.,hint_room02,24
+Avez vous trouvez toutes les plaques de construction?,hint_room02,25
+Etes-vous sûr d’avoir choisi les bonnes plaquettes ?,hint_room02,26
+Vous devez mettre les plaquettes sur le Constructor.,hint_room02,27
+Il y a un schéma indiquant l’emplacement des plaquettes sur le Constructor.,hint_room02,28
+Appuyé sur le bouton jaune clignotant.,hint_room02,29
+Appuyé sur le bouton vert pour lancer la construction du cube positronique.,hint_room02,30
+"Humain, j’ai réussi à pirater les plan du cube positronique, je vais les charger dans le constructor. Maintenant appuyé sur le bouton jaune clignottant afin de charger le plan dans la machine.",hint_room02,31
+Vous devez trouver un moyen d’alimenter le haut de la pyramide avec des lasers.,hint_room03,1
+Vous devez poser les cubes sur les socles.,hint_room03,2
+Les socles allumés sont la source de départ des lasers.,hint_room03,3
+Il y a des symboles sur les cubes.,hint_room03,4
+Les cubes doivent être positionnés avec le symbole vers le haut.,hint_room03,5
+Le symbole sur les cubes se retrouve sur les bases allumées.,hint_room03,6
+Une seule orientation permet aux cubes de s’allumer.,hint_room03,7
+Vous devez former un chemin laser pour atteindre les cibles en haut de la pyramide.,hint_room03,8
+Tous les cubes doivent être utilisés.,hint_room03,9
+Les symboles sur les cubes indiquent à quel chemin laser ils appartiennent.,hint_room03,10
+Avez-vous pris tous les cubes?,hint_room03,11
+Avez-vous trouvé les cubes ?,hint_room03,12
+Ne bloquez pas les laser.,hint_room03,13
+Quelqu’un bloque un laser.,hint_room03,14
+Il y a un code sur la porte.,hint_room03,15
+Le code doit être entré dans le dispositif d’ouverture de porte.,hint_room03,16
+La porte build est ouverte.,hint_room03,17
+La porte du système est ouverte.,hint_room04,1
+"Avant d’entrer, commencez par rétablir le courant des lumières.",hint_room04,2
+"Peut être qu’il vaut mieux que quelqu’un reste en dehors de la salle système, s'il vous arrivait quelque chose, un survivant pourrait être utile.",hint_room04,3
+je vous avais dit de ne pas tous y aller en même temps. Ca vous apprendra.,hint_room04,4
+oui,hint_other,1
+non,hint_other,2
+ne touchez pas à ça,hint_other,3
+ne faite pas ça c’est fragile,hint_other,4
+Vous faite fausse route,hint_other,5
+Arrêtez ce que vous faites.,hint_other,6
+"Vous n’avez pas compris, réfléchissez.",hint_other,7
+"Écouter moi humain, vous devez faire ce que je dis, votre vie en dépend, vous devez sauter sur place, maintenant… J’esperer que vous l’avez fait et que vous vous santé stupide.",hint_other,8
+Vous étes des humain stupide.,hint_other,9

@@ -30,5 +30,5 @@
               "hint_room02":{"none":0,"electricite off":1,"lire documentation":2,"circuit pas dans le vide":3,"chercher plaquettes":4,"borne inspection labo":5,"guider joueur coeur":6,"presse multiple bouton":7,"cable caisson central":8},
               "hint_room03":{"none":0,"code derrier porte":1,"cubes au-dessus porte":2,"mal compris code porte":3,"code dans dispositif porte":4,"chemin laser":5,"socle cube":6,"socle allumé":7}
             },
-    "bypass":{"set_opening_Door":{"none":0,"door1":1,"door2":2,"door3":3,"door4":4},"set_closing_Door":{"none":0,"door01":1,"door02":2,"door03":3,"door04":4},"keypad_button_keypadValidate":{"released":0, "pushed":1},"constructor_button_constructorValidate":{"released":0, "pushed":1},"room01_button_room01Validate":{"released":0, "pushed":1}}
+    "bypass":{"set_opening_Door":{"none":0,"door1":1,"door2":2,"door3":3,"door4":4},"set_closing_Door":{"none":0,"door01":1,"door02":2,"door03":3,"door04":4},"keypad_button_keypadValidate":{"released":0, "pushed":1},"constructor_button_constructorValidate":{"released":0, "pushed":1},"room01_button_room01Validate":{"released":0, "pushed":1},"incal_validate":{"released":0,"pushed":1},"god_mode":{"released":0,"pushed":1}}
 }
