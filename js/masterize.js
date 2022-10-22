@@ -1,4 +1,9 @@
 $(document).ready(function () {
+  $("#hint_button").click(function(){
+    console.log('modal hint clicked');
+    $("#modal-hints").toggleClass('active');
+  })
+
   $( "#shutdown_control" ).click(function() {
     if (confirm("Really sure??")) {
     $.post("/shutdown_control",
@@ -13,7 +18,7 @@ $(document).ready(function () {
      }else {
        console.log("Cancel halt system.");
      }
-});
+   });
 $( "#start_unity" ).click(function() {
   if (confirm("Really sure??")) {
     $.post("/start_unity",
@@ -31,13 +36,17 @@ $( "#start_unity" ).click(function() {
 //TODO: harmonize this and other buttons
 $("button.command_button").click(function(){
   var controller_id=$(this).data('controller_id');
+  var value = $(this).data('value');
+  if(value == undefined){
+    value='1'
+  }
   $.post("/send_command",
      {
         controller_id:controller_id,
         value:'1'
      },
      function (data, status) {
-       console.log('bypass activated:'+controller_id);
+       console.log('Control command triggered:'+controller_id+','+value);
      });
 })
 
@@ -116,5 +125,5 @@ $("select.command").change(function (event) {
       });
     $(this).val('none')
 });
-  //setInterval("getcheckout()", 2000);
+
 });

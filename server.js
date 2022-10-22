@@ -9,6 +9,9 @@ const { exec } = require("child_process");
 const exec_async = util.promisify(require('node:child_process').exec);
 var dmxlib=require('dmxnet');
 var dmxnet = new dmxlib.dmxnet();
+//const csv = require('csv')
+const fs = require("fs");
+const { parse } = require("csv-parse");
 const commands= require('./commands.json')
 const dmx_universes=require('./dmx_universes.json')
 //write a all blink method that set all channels to 255 on everybody
@@ -40,6 +43,26 @@ switch_ports={'roofpi':8,'rfidpi':18,'incalpi':14,'lockerspi':10,'liftpi':12,'ro
 var ONLINE_MODE=true;
 
 let rpis_status={}
+hints={}
+fs.createReadStream("./hints.csv")
+  .pipe(parse({ delimiter: "," }))
+  .on("data", function (row) {
+    hint={text:row[0],index:row[2]}
+    if(hints[row[1]] != undefined){
+      hints[row[1]].push(hint)
+    }
+    else{
+      hints[row[1]]=[hint]
+    }
+  //  console.log(row);
+  })
+  .on("end", function () {
+    console.log("Importing hints: done.");
+    //console.log(JSON.stringify(hints))
+  })
+  .on("error", function (error) {
+    console.log("error on hints import:",error.message);
+  });
 
 app.use(express.urlencoded({ extended: true }));
 const router = express.Router();
@@ -60,8 +83,7 @@ router.get('/',function(req,res){
 router.get('/masterize',function(req,res){
   var hints_filtered = Object.keys(commands).filter((key) => key == 'hints').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
   var bypass_filtered = Object.keys(commands).filter((key) => key == 'bypass').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
-  res.render('masterize',{title:'masterize',hints_commands: hints_filtered,bypass_commands:bypass_filtered})
-
+  res.render('masterize',{title:'masterize',hints_commands: hints,bypass_commands:bypass_filtered})
   //__dirname : It will resolve to your project folder.
 });
 router.get('/dashboard',function(req,res){
@@ -386,6 +408,7 @@ function checkup(){
 function generate_debug_data(){
   Object.entries(rpi_services).forEach(([rpi,services])=>
   {
+    rpis_status[rpi]["services"]=[]
       services.forEach(service=>{
         //maybe add -i ~/.ssh/face6 or id_rsa
         var statuses_json={}
@@ -398,7 +421,7 @@ function generate_debug_data(){
         else{
           statuses_json['sio_status']=false
         }
-          rpis_status[rpi]['services'][service]=statuses_json
+          rpis_status[rpi]['services'].push(statuses_json)
         })
 
     })
@@ -418,7 +441,7 @@ if(ONLINE_MODE){ //set to true for production
 else{
   generate_debug_data()
   var status=['active','inactive']
-  setInterval(function(){rpis_status['liftpi']['controller']['status']=status[Math.floor(Math.random()*2)]},2000)
+  //setInterval(function(){rpis_status['liftpi']['controller']['status']=status[Math.floor(Math.random()*2)]},2000)
 }
 
 function restart_rpi_service(rpi,service){
