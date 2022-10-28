@@ -43,7 +43,7 @@ $("button.command_button").click(function(){
   $.post("/send_command",
      {
         controller_id:controller_id,
-        value:'1'
+        value:value
      },
      function (data, status) {
        console.log('Control command triggered:'+controller_id+','+value);
