@@ -88,7 +88,7 @@ function refreshServicesStatus(data){
 }
 function refresh_ping_ssh(data){
   $.each(data, function(k,v) {
-    console.log(JSON.stringify(v['ping']));
+    //console.log(JSON.stringify(v['ping']));
     if(v['ping']){
       $('#'+k+'_ping').addClass("label-success");
       $('#'+k+'_ping').removeClass("label-error");
@@ -182,7 +182,7 @@ $(document).ready(function () {
   json=JSON.parse(new TextDecoder().decode(value));
   refreshServicesStatus(json)
   refresh_ping_ssh(json)
-  //console.log(JSON.stringify(json));
+  console.log(JSON.stringify(json));
   //console.log(new TextDecoder().decode(value));
   //$('#stream').html(new TextDecoder().decode(value));
   }
