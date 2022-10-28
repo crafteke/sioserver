@@ -40,7 +40,7 @@ switch_ports={'roofpi':8,'rfidpi':18,'incalpi':14,'lockerspi':10,'liftpi':12,'ro
 // '10.0.0.238':['dmxspi'],
 // '10.0.0.216':['dmx2pwm']}
 //FOR production set to true
-var ONLINE_MODE=true;
+var ONLINE_MODE=false;
 
 let rpis_status={}
 hints={}

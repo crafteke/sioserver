@@ -22,5 +22,11 @@ div(class="modal",id="modal-hints")
                       td
                         button(class='btn btn-primary command_button',data-controller_id=hint_room ,data-value=hint['index']) Give!
     div(class="modal-footer")
-      a(href="#menu_hint",class="btn float-left m-1") Top
+      select(id="hint-room-selector" class="col-3 float-left form-select selectable")
+        option(value='1',selected='',class="select_none") HAL
+        option(value='4',selected='',class="select_none") Corridor
+        option(value='8',selected='',class="select_none") room 01
+        option(value='6',selected='',class="select_none") room 02
+        option(value='2',selected='',class="select_none") room 03
+        option(value='7',selected='',class="select_none") room 04
       button(class="btn btn-primary",onclick='$("#modal-hints").toggleClass("active");') Close

@@ -104,6 +104,23 @@ $("#speech_action").click(function() {
        //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
      });
 });
+$("#hint-room-selector").change(function() {
+  msg=$("#input-speech").val()
+  room_id=$("#hint-room-selector").val()
+  //room_=$(this).children("option:selected").val()
+
+  $.post("/send_speech",
+     {
+       controller_id:"speech_command",
+       value: '',
+       room: room_id
+     },
+     function (data, status) {
+       console.log("room select command",room_id);
+       //console.log("timer started.")
+       //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
+     });
+});
 $("#speech_clear").click(function(){
   $("#input-speech").val("");
   console.log("Clear text")
