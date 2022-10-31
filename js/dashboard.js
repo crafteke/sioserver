@@ -29,37 +29,6 @@ function generate_label(k,v){
   }
 
 }
-function getcheckout(){
-  $.getJSON("/co_status", function (data){
-    $.each(data, function(k,v) {
-      //
-      // console.log("-----"+Object.keys(v)[0])
-      var content=''
-
-      var tbl_row="<tr>"
-  //var tbl_row = "<tr><td>"+Object.keys(v)[0]+'</td>';
-   $.each(v, function() {
-        var name=''
-       $.each(this, function(k , v) {
-            if(k=='name'){ name=v}
-            tbl_row+='<td>'+generate_label(k,v)+'</td>'
-       });
-       //content += "<tr class=\""+( odd_even ? "odd" : "even")+"\">"+tbl_row+"</tr>";
-       //tbl_row+='<i class="icon icon-menu"></i>'
-       tbl_row+='<td><i class="icon icon-2x icon-more-horiz"></i></td>'
-       tbl_row+='<td><button onclick="click_restart(this)" class="btn" data-rpi-controller='+k+'-'+name+'>Restart</button></td>'
-       tbl_row+='</tr>'
-       content+=tbl_row
-       //odd_even = !odd_even;
-   });
-   $('#'+k).html(tbl_row)
-    // $("#content").html("> "++"</br> > ");     //console.log(data)
-  })
-});
-
-}
-
-
 
 function refreshServicesStatus(data){
     //k is rpi, v is service
@@ -68,23 +37,24 @@ function refreshServicesStatus(data){
       // console.log("-----"+Object.keys(v)[0])
   var tbl_row="<tr>"
   //var tbl_row = "<tr><td>"+Object.keys(v)[0]+'</td>';
-
-   $.each(v['services'], function() {
-     //systemd services
-       var name=''
-        $.each(this, function(k , v) {
-             if(k=='name'){ name=v}
-             tbl_row+='<td>'+generate_label(k,v)+'</td>'
-        });
-        //content += "<tr class=\""+( odd_even ? "odd" : "even")+"\">"+tbl_row+"</tr>";
-        //tbl_row+='<i class="icon icon-menu"></i>'
-        tbl_row+='<td><button onclick="click_getjournal(this)" class="btn btn-primary btn-action btn-lg" data-rpi-service='+k+'-'+name+'><i class="icon icon icon-more-horiz"></i></button></td>'
-        tbl_row+='<td><button onclick="click_restart(this)" class="btn" data-rpi-service='+k+'-'+name+'>Restart</button></td>'
-        tbl_row+='</tr>'
-       //odd_even = !odd_even;
-   });
-   $('#'+k).html(tbl_row)
-  })
+  if(v['services'].length>0){
+    $.each(v['services'], function() {
+      //systemd services
+        var name=''
+         $.each(this, function(k , v) {
+              if(k=='name'){ name=v}
+              tbl_row+='<td>'+generate_label(k,v)+'</td>'
+         });
+         //content += "<tr class=\""+( odd_even ? "odd" : "even")+"\">"+tbl_row+"</tr>";
+         //tbl_row+='<i class="icon icon-menu"></i>'
+         tbl_row+='<td><button onclick="click_getjournal(this)" class="btn btn-primary btn-action btn-lg" data-rpi-service='+k+'-'+name+'><i class="icon icon icon-more-horiz"></i></button></td>'
+         tbl_row+='<td><button onclick="click_restart(this)" class="btn" data-rpi-service='+k+'-'+name+'>Restart</button></td>'
+         tbl_row+='</tr>'
+        //odd_even = !odd_even;
+        $('#'+k).html(tbl_row)
+      })
+   }
+ })
 }
 function refresh_ping_ssh(data){
   $.each(data, function(k,v) {
@@ -128,6 +98,14 @@ function close_logs_modal(){
   $("#log_content").addClass("loading loading-lg");
   $("#log_title").html("Loading...")
 }
+function get_json_status(){
+  $.getJSON("/co_status", function (json){
+    console.log('Refreshing data:',JSON.stringify(json))
+    refreshServicesStatus(json)
+    refresh_ping_ssh(json)
+    //console.log(JSON.stringify(json));
+  })
+}
 $(document).ready(function () {
   $("button.powercyclepi").click(function(){
     var rpi=$(this).data('rpi');
@@ -138,11 +116,7 @@ $(document).ready(function () {
        function (data, status) {
          console.log('Powercycling:'+rpi);
        });
-  })
-
-  //setInterval("getcheckout()", 2000);
-});
-$(document).ready(function () {
+  });
   $("button.restartpi").click(function(){
     var rpi=$(this).data('rpi');
     $.post("/restartpi",
@@ -154,8 +128,9 @@ $(document).ready(function () {
        });
   })
 
-  //setInterval("getcheckout()", 2000);
+  setInterval("get_json_status()", 10000);
 });
+
 /*this is not working*/
 // window.onload = function(){
 //   var source = new EventSource('/stream');
@@ -166,24 +141,53 @@ $(document).ready(function () {
 //   };
 // }
 
-(async () => {
-  const response = await fetch("/stream_services");
-
-  if (!response.ok) {
-    throw Error(response.status);
-  }
-
-  for (const reader = response.body.getReader();;) {
-    const {value, done} = await reader.read();
-
-    if (done) {
-      break;
-    }
-  json=JSON.parse(new TextDecoder().decode(value));
-  refreshServicesStatus(json)
-  refresh_ping_ssh(json)
-  console.log(JSON.stringify(json));
-  //console.log(new TextDecoder().decode(value));
-  //$('#stream').html(new TextDecoder().decode(value));
-  }
-})();
+// (async () => {
+//   const response = await fetch("/stream_services");
+//
+//   if (!response.ok) {
+//     throw Error(response.status);
+//   }
+//
+//   for (const reader = response.body.getReader();;) {
+//     const {value, done} = await reader.read();
+//
+//     if (done) {
+//       break;
+//     }
+//   json=JSON.parse(new TextDecoder().decode(value));
+//   refreshServicesStatus(json)
+//   refresh_ping_ssh(json)
+//   console.log(JSON.stringify(json));
+//   //console.log(new TextDecoder().decode(value));
+//   //$('#stream').html(new TextDecoder().decode(value));
+//   }
+// })();
+// function getcheckout(){
+//   $.getJSON("/co_status", function (data){
+//     $.each(data, function(k,v) {
+//       //
+//       // console.log("-----"+Object.keys(v)[0])
+//       var content=''
+//
+//       var tbl_row="<tr>"
+//   //var tbl_row = "<tr><td>"+Object.keys(v)[0]+'</td>';
+//    $.each(v, function() {
+//         var name=''
+//        $.each(this, function(k , v) {
+//             if(k=='name'){ name=v}
+//             tbl_row+='<td>'+generate_label(k,v)+'</td>'
+//        });
+//        //content += "<tr class=\""+( odd_even ? "odd" : "even")+"\">"+tbl_row+"</tr>";
+//        //tbl_row+='<i class="icon icon-menu"></i>'
+//        tbl_row+='<td><i class="icon icon-2x icon-more-horiz"></i></td>'
+//        tbl_row+='<td><button onclick="click_restart(this)" class="btn" data-rpi-controller='+k+'-'+name+'>Restart</button></td>'
+//        tbl_row+='</tr>'
+//        content+=tbl_row
+//        //odd_even = !odd_even;
+//    });
+//    $('#'+k).html(tbl_row)
+//     // $("#content").html("> "++"</br> > ");     //console.log(data)
+//   })
+// });
+//
+// }
