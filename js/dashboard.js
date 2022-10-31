@@ -150,7 +150,7 @@ $(document).ready(function () {
           rpi:rpi
        },
        function (data, status) {
-         console.log('Powercycling:'+rpi);
+         console.log('restarting:'+rpi);
        });
   })
 
