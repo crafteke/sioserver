@@ -177,7 +177,7 @@ app.post("/shutdown_control", async (req, res) => {
 })
 app.post("/powercyclepi", async (req, res) => {
   console.log("Powercycling pi:",req.body['rpi']);
-  powerCyclePi(req.body[rpi])
+  //powerCyclePi(req.body[rpi])
    res.json([{
       status: 'ok'
    }])
