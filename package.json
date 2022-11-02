@@ -11,6 +11,7 @@
     "url": "git+ssh://git@bitbucket.org/oxykube/dashboard.git"
   },
   "dependencies": {
+    "csv": "^6.2.1",
     "dmxnet": "^0.8.0",
     "express": "4.17.3",
     "pug": "^3.0.2",

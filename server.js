@@ -9,6 +9,9 @@ const { exec } = require("child_process");
 const exec_async = util.promisify(require('node:child_process').exec);
 var dmxlib=require('dmxnet');
 var dmxnet = new dmxlib.dmxnet();
+//const csv = require('csv')
+const fs = require("fs");
+const { parse } = require("csv-parse");
 const commands= require('./commands.json')
 const dmx_universes=require('./dmx_universes.json')
 //write a all blink method that set all channels to 255 on everybody
@@ -40,6 +43,26 @@ switch_ports={'roofpi':8,'rfidpi':18,'incalpi':14,'lockerspi':10,'liftpi':12,'ro
 var ONLINE_MODE=true;
 
 let rpis_status={}
+hints={}
+fs.createReadStream("./hints.csv")
+  .pipe(parse({ delimiter: "," }))
+  .on("data", function (row) {
+    hint={text:row[0],index:row[2]}
+    if(hints[row[1]] != undefined){
+      hints[row[1]].push(hint)
+    }
+    else{
+      hints[row[1]]=[hint]
+    }
+  //  console.log(row);
+  })
+  .on("end", function () {
+    console.log("Importing hints: done.");
+    //console.log(JSON.stringify(hints))
+  })
+  .on("error", function (error) {
+    console.log("error on hints import:",error.message);
+  });
 
 app.use(express.urlencoded({ extended: true }));
 const router = express.Router();
@@ -60,8 +83,7 @@ router.get('/',function(req,res){
 router.get('/masterize',function(req,res){
   var hints_filtered = Object.keys(commands).filter((key) => key == 'hints').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
   var bypass_filtered = Object.keys(commands).filter((key) => key == 'bypass').reduce((obj, key) => {return Object.assign(obj,{ [key]:commands[key]});},{});
-  res.render('masterize',{title:'masterize',hints_commands: hints_filtered,bypass_commands:bypass_filtered})
-
+  res.render('masterize',{title:'masterize',hints_commands: hints,bypass_commands:bypass_filtered})
   //__dirname : It will resolve to your project folder.
 });
 router.get('/dashboard',function(req,res){
@@ -154,7 +176,7 @@ app.post("/shutdown_control", async (req, res) => {
    }])
 })
 app.post("/powercyclepi", async (req, res) => {
-  console.log("Powercycling pi:",req.body[rpi]);
+  console.log("Powercycling pi:",req.body['rpi']);
   powerCyclePi(req.body[rpi])
    res.json([{
       status: 'ok'
@@ -162,8 +184,8 @@ app.post("/powercyclepi", async (req, res) => {
 })
 
 app.post("/restartpi", async (req, res) => {
-  console.log("Restarting pi:",req.body[rpi]);
-  powerCyclePi(req.body[rpi])
+  console.log("Restarting pi:",req.body['rpi']);
+  restartPi(req.body['rpi'])
    res.json([{
       status: 'ok'
    }])
@@ -210,22 +232,24 @@ app.get("/stream_commands", (req, res) => {
   })
 
 app.get("/stream_services", (req, res) => {
-    res.set({
-      "Access-Control-Allow-Origin": "*",
-      "Cache-Control": "no-cache",
-      "Connection": "keep-alive",
-      "Content-Type": "text/event-stream",
-    });
-    res.flushHeaders();
-
-    const interval = setInterval(() => {
-      res.write(JSON.stringify(rpis_status))
-    }, 1000);
-
-    res.on("close", () => {
-      clearInterval(interval);
-      res.end();
-    });
+    // res.set({
+    //   "Access-Control-Allow-Origin": "*",
+    //   "Cache-Control": "no-cache",
+    //   "Connection": "keep-alive",
+    //   "Content-Type": "text/event-stream",
+    // });
+    res.json(rpi_status)
+    // res.flushHeaders();
+    //
+    //
+    // const interval = setInterval(() => {
+    //   res.write(JSON.stringify(rpis_status))
+    // }, 1000);
+    //
+    // res.on("close", () => {
+    //   //clearInterval(interval);
+    //   res.end();
+    // });
   })
 app.use('/', router);
 const server = http.createServer(app);
@@ -264,8 +288,8 @@ io.on('connection',  function (socket) {
   }
 )
   socket.on("Command", (data) => {
-      //log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
-      //console.log(log)
+      log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
+      console.log(log)
       // if(data.controller_id != "corridor_padled_state"){
       //   logs = log+"\n"+logs
       //   logs=logs.split("\n").slice(0,30).join("\n");
@@ -325,7 +349,8 @@ function check_ping(rpi){
 //       console.log('debuuuuuug:'+stdout=='ok')
 //      rpis_status[rpi]['ping']=(stdout=='ok')
 //   })
-  exec(`ping -c 1 ${hosts_ip[rpi]} > /dev/null`).on('exit', code => rpis_status[rpi]['ping']=(code==0))
+  exec(`ping -n 1 ${hosts_ip[rpi]}`).on('exit', code => rpis_status[rpi]['ping']=(code==0)) //windows
+  //exec(`ping -c 1 ${hosts_ip[rpi]} > /dev/null`).on('exit', code => console.log(code)) //linux
 }
 function check_ssh_port(rpi){
   exec(`timeout 5 bash -c "</dev/tcp/${hosts_ip[rpi]}/22"`).on('exit', code => rpis_status[rpi]['ssh']=(code==0))
@@ -386,6 +411,7 @@ function checkup(){
 function generate_debug_data(){
   Object.entries(rpi_services).forEach(([rpi,services])=>
   {
+    rpis_status[rpi]["services"]=[]
       services.forEach(service=>{
         //maybe add -i ~/.ssh/face6 or id_rsa
         var statuses_json={}
@@ -398,7 +424,7 @@ function generate_debug_data(){
         else{
           statuses_json['sio_status']=false
         }
-          rpis_status[rpi]['services'][service]=statuses_json
+          rpis_status[rpi]['services'].push(statuses_json)
         })
 
     })
@@ -418,7 +444,7 @@ if(ONLINE_MODE){ //set to true for production
 else{
   generate_debug_data()
   var status=['active','inactive']
-  setInterval(function(){rpis_status['liftpi']['controller']['status']=status[Math.floor(Math.random()*2)]},2000)
+  //setInterval(function(){rpis_status['liftpi']['controller']['status']=status[Math.floor(Math.random()*2)]},2000)
 }
 
 function restart_rpi_service(rpi,service){
@@ -451,6 +477,7 @@ async function asyncAllPiCommand(cmd){
   rpi_names=Object.keys(hosts_ip);
   promises=[]
   for(index in rpi_names){
+    //TO FIX/ put quot for cmd_
   promises.push(exec_async("ssh -o \"StrictHostKeyChecking=no\" pi@"+rpi_names[index]+'.local'+ ' '+cmd))
   // debugger;
   }
@@ -458,6 +485,9 @@ async function asyncAllPiCommand(cmd){
 }
 function powerCyclePi(rpi){
     exec("./tplink_commands/reboot_int.sh 10.0.0.254 "+switch_ports[rpi])
+}
+function restartPi(rpi){
+    exec("ssh -o \"StrictHostKeyChecking=no\" pi@"+hosts_ip[rpi]+" 'sudo reboot'")
 }
 async function getlogs_rpi_service(rpi,service){
   const { stdout, stderr } = await exec_async("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'journalctl -u "+ service +".service | tail -n200'")
