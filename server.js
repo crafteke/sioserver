@@ -1,3 +1,4 @@
+#!/usr/local/bin/node
 const http = require('http');
 const express = require('express');
 const path = require('path');
@@ -177,7 +178,7 @@ app.post("/shutdown_control", async (req, res) => {
 })
 app.post("/powercyclepi", async (req, res) => {
   console.log("Powercycling pi:",req.body['rpi']);
-  //powerCyclePi(req.body[rpi])
+  powerCyclePi(req.body['rpi'])
    res.json([{
       status: 'ok'
    }])
@@ -196,7 +197,8 @@ app.post("/start_unity", (req, res) => {
   console.log("Starting unity.",req.body);
   //for linux WSL
   // /mnt/c/Users/Crafteke/Desktop/dystopia_latest/Face6.exe &
-  exec(`start C:\\Users\\Crafteke\\Desktop\\dystopia_latest\\Face6.exe`, (error, stdout, stderr) => {
+  //exec(`start C:\\Users\\Crafteke\\Desktop\\dystopia_latest\\Face6.exe`, (error, stdout, stderr) => {
+  exec("/mnt/c/Users/Crafteke/Desktop/dystopia_latest/Face6.exe &", (error, stdout, stderr) => {
       console.log(error)
       console.log(stdout)
       console.log(stderr)
@@ -262,8 +264,8 @@ var logs=""
 /*--------SOCKET IO Server ----------*/
 var io = require('socket.io')({});
 
-io.attach(4567,{pingTimeout:50000,pingInterval:10000});
-
+//io.attach(4567,{pingTimeout:50000,pingInterval:10000});
+io.attach(4567);
 var clients={};
 var sio_socket;
 
@@ -324,8 +326,13 @@ io.on('connection',  function (socket) {
 
 });
 
-function check_clients(){
-  console.log(JSON.stringify(clients))
+async function check_clients(){
+  // server B
+  const sockets = await io.fetchSockets();
+  for (const socket of sockets) {
+    console.log("check client:",socket.id,' : ', socket.data)
+  }
+  /*console.log(JSON.stringify(clients))
   Object.entries(clients).forEach(([name,s_id])=>{
     if(s_id) {
       console.log(name+":"+'connected');
@@ -334,13 +341,13 @@ function check_clients(){
       console.log(name+":"+'disconnected');
 
     }
-})
+})*/
 }
-//setInterval(check_clients,2000);
+setInterval(check_clients,1000);
 
 Object.entries(rpi_services).forEach(([rpi,services])=>
 {
-    rpis_status[rpi]={}
+    rpis_status[rpi]={'ping':false,'ssh':false}
 })
 
 function check_ping(rpi){
@@ -349,7 +356,7 @@ function check_ping(rpi){
 //       console.log('debuuuuuug:'+stdout=='ok')
 //      rpis_status[rpi]['ping']=(stdout=='ok')
 //   })
-  exec(`ping -n 1 ${hosts_ip[rpi]}`).on('exit', code => rpis_status[rpi]['ping']=(code==0)) //windows
+  exec(`ping -c 1 ${hosts_ip[rpi]}`).on('exit', code => rpis_status[rpi]['ping']=(code==0)) //windows
   //exec(`ping -c 1 ${hosts_ip[rpi]} > /dev/null`).on('exit', code => console.log(code)) //linux
 }
 function check_ssh_port(rpi){
@@ -365,47 +372,49 @@ function checkup(){
   });
   Object.entries(rpi_services).forEach(([rpi,services])=>
   {
-      rpis_status[rpi]["services"]=[]
-      services.forEach(service=>{
-        //maybe add -i ~/.ssh/face6 or id_rsa
-        var statuses_json={}
-        exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'sudo systemctl show "+service+" --no-page'", (error, stdout, stderr) => {
-            if (error) {
-                console.log(`check error: ${error.message}`);
-                statuses_json+={name:service,'error':error.message}
-                return;
-            }
-            if (stderr) {
-                console.log(`check stderr: ${stderr}`);
-                statuses_json+={name:service,'error':stderr}
-                return;
-            }
-            var regex_name= /Names=.*/
-            var regex_status= /StatusText=.*/
-            var regex_active= /ActiveState=.*/
-            // if(regex_name.test(stdout)){
-            //     statuses_json["name"]=regex_name.exec(stdout)[0].split('=')[1]
-            // }
-            statuses_json['name']=service
+      if(rpis_status[rpi]['ssh']){
+        rpis_status[rpi]["services"]=[]
+        services.forEach(service=>{
+          //maybe add -i ~/.ssh/face6 or id_rsa
+          var statuses_json={}
+          exec("ssh -o \"StrictHostKeyChecking=no\" pi@" +hosts_ip[rpi]+ " 'sudo systemctl show "+service+" --no-page'", (error, stdout, stderr) => {
+              if (error) {
+                  console.log(`check error: ${error.message}`);
+                  statuses_json+={name:service,'error':error.message}
+                  return;
+              }
+              if (stderr) {
+                  console.log(`check stderr: ${stderr}`);
+                  statuses_json+={name:service,'error':stderr}
+                  return;
+              }
+              var regex_name= /Names=.*/
+              var regex_status= /StatusText=.*/
+              var regex_active= /ActiveState=.*/
+              // if(regex_name.test(stdout)){
+              //     statuses_json["name"]=regex_name.exec(stdout)[0].split('=')[1]
+              // }
+              statuses_json['name']=service
 
-              if(regex_active.test(stdout)){
-                statuses_json['status']=regex_active.exec(stdout)[0].split('=')[1]
-              }
-              statuses_json['notify']=''
+                if(regex_active.test(stdout)){
+                  statuses_json['status']=regex_active.exec(stdout)[0].split('=')[1]
+                }
+                statuses_json['notify']=''
 
-              if(regex_status.test(stdout)){
-                statuses_json['notify']=regex_status.exec(stdout)[0].split('=')[1]
-              }
-              if(service=='controller'){
-                statuses_json['sio_status']=clients[rpi] ? 'UP' : 'DOWN';
-              }
-              else{
-                statuses_json['sio_status']=false
-              }
+                if(regex_status.test(stdout)){
+                  statuses_json['notify']=regex_status.exec(stdout)[0].split('=')[1]
+                }
+                if(service=='controller'){
+                  statuses_json['sio_status']=clients[rpi] ? 'UP' : 'DOWN';
+                }
+                else{
+                  statuses_json['sio_status']=false
+                }
 
-              rpis_status[rpi]["services"].push(statuses_json)
-            });
-          })
+                rpis_status[rpi]["services"].push(statuses_json)
+              });
+            })
+          }
     })
 }
 function generate_debug_data(){
@@ -524,13 +533,14 @@ async function getlogs_rpi_service(rpi,service){
 function restart_all_controllers(){
   Object.entries(rpi_services).forEach(([rpi,services])=>
   {
-    console.log('Restarting services RPi:'+rpi)
+      if(rpis_status[rpi]['ssh']){
+      console.log('Restarting services RPi:'+rpi)
 
-    services.forEach(service=>{
-      //maybe add -i ~/.ssh/face6 or id_rsa
-      restart_rpi_service(rpi,service)
-  })
-
+      services.forEach(service=>{
+        //maybe add -i ~/.ssh/face6 or id_rsa
+        restart_rpi_service(rpi,service)
+    })
+  }
   //
   // services.forEach(rpi => {
   //   console.log(`Restart rpi controller: ${rpi}...`)

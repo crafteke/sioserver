@@ -71,11 +71,24 @@ html
                                 td
                                   button(class='btn btn-primary command_button' data-controller_id=command, value=1) Activate
       div(class='container')
-        img(class="zoom img-responsive",src="http://halpi.local:8080/stream/video.mjpeg")
-        img(class="zoom img-responsive",src="http://counterpadpi.local:8080/stream/video.mjpeg")
-        img(class="zoom img-responsive",src="http://lockerspi.local:8080/stream/video.mjpeg")
-        img(class="zoom img-responsive",src="http://incalpi.local:8080/stream/video.mjpeg")
-        //-iframe(class="video-responsive", width="720", height="600",frameborder="0",src="http://watchpi.local:8888/")
+        div(class='columns')
+          div(class='column col-4 mt-1')
+            img(class="img-responsive",src="http://halpi.local:8080/stream/video.mjpeg")
+          div(class='column col-4 mt-1')
+            img(class="img-responsive",src="http://counterpadpi.local:8080/stream/video.mjpeg")
+          div(class='column col-4 mt-1')
+            img(class="img-responsive",src="http://lockerspi.local:8080/stream/video.mjpeg")
+          div(class='column col-4 mt-1')
+            img(class="img-responsive",src="http://incalpi.local:8080/stream/video.mjpeg")
+
+
+
+        //-
+          img(class="zoom img-responsive",src="http://halpi.local:8080/stream/video.mjpeg")
+          img(class="zoom img-responsive",src="http://counterpadpi.local:8080/stream/video.mjpeg")
+          img(class="zoom img-responsive",src="http://lockerspi.local:8080/stream/video.mjpeg")
+          img(class="zoom img-responsive",src="http://incalpi.local:8080/stream/video.mjpeg")
+          iframe(class="video-responsive", width="720", height="600",frameborder="0",src="http://watchpi.local:8888/")
 
 //-
               div(class='container')

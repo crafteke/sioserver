@@ -105,7 +105,6 @@ $("#speech_action").click(function() {
      });
 });
 $("#hint-room-selector").change(function() {
-  msg=$("#input-speech").val()
   room_id=$("#hint-room-selector").val()
   //room_=$(this).children("option:selected").val()
 

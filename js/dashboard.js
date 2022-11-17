@@ -127,7 +127,7 @@ $(document).ready(function () {
          console.log('restarting:'+rpi);
        });
   })
-
+  get_json_status();
   setInterval("get_json_status()", 10000);
 });
 
