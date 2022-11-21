@@ -319,9 +319,14 @@ io.on('connection',  function (socket) {
       clients[data.toLowerCase()]=socketId;
       clientName=data.toLowerCase();
 	});
-  socket.once('disconnect', function () {
+  socket.on("disconnect", (reason) => {
+    console.log("Client disconnected:",clientName, ' reason:',reason)
     clients[clientName]=false;
   });
+  // socket.once('disconnect', function () {
+  //
+  //   clients[clientName]=false;
+  // });
 
 
 });
@@ -343,7 +348,7 @@ async function check_clients(){
     }
 })*/
 }
-setInterval(check_clients,1000);
+//setInterval(check_clients,1000);
 
 Object.entries(rpi_services).forEach(([rpi,services])=>
 {
@@ -533,7 +538,7 @@ async function getlogs_rpi_service(rpi,service){
 function restart_all_controllers(){
   Object.entries(rpi_services).forEach(([rpi,services])=>
   {
-      if(rpis_status[rpi]['ssh']){
+      if(true || rpis_status[rpi]['ssh']){
       console.log('Restarting services RPi:'+rpi)
 
       services.forEach(service=>{
