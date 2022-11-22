@@ -11,7 +11,14 @@
   transform: scale(2); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
   z-index: -1;
 }
-
+.zoomed{
+  position:fixed;
+  top: 26%;
+  left: 18%;
+  width: 1280px;
+  height:720px;
+  
+}
 /* .commands_ux{
   position: sticky;
 	bottom: 15px;

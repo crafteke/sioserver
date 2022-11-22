@@ -3,7 +3,9 @@ $(document).ready(function () {
     console.log('modal hint clicked');
     $("#modal-hints").toggleClass('active');
   })
-
+$("img.img-responsive").click(function(){
+  $(this).toggleClass('zoomed')
+})
   $( "#shutdown_control" ).click(function() {
     if (confirm("Really sure??")) {
     $.post("/shutdown_control",

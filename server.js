@@ -290,8 +290,11 @@ io.on('connection',  function (socket) {
   }
 )
   socket.on("Command", (data) => {
-      log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
-      console.log(log)
+      r=/corridor_/
+      if(!r.test(data.controller_id)){
+        log="Command from:"+clientName+", id:"+data.controller_id+", value:"+data.value
+        console.log(timestamp(),log)
+      }
       // if(data.controller_id != "corridor_padled_state"){
       //   logs = log+"\n"+logs
       //   logs=logs.split("\n").slice(0,30).join("\n");
@@ -575,7 +578,29 @@ function setDMX(ip,universe,number_of_channels,value){
   //   sender.reset();
   // }
 }
+function timestamp(){
+  let date_ob = new Date();
 
+  // current date
+  // adjust 0 before single digit date
+  let date = ("0" + date_ob.getDate()).slice(-2);
+
+  // current month
+  let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+
+  // current year
+  let year = date_ob.getFullYear();
+
+  // current hours
+  let hours = date_ob.getHours();
+
+  // current minutes
+  let minutes = date_ob.getMinutes();
+
+  // current seconds
+  let seconds = date_ob.getSeconds();
+  return year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds
+}
 
 // {
 //     lift:{button_up:{released:0, pushed:1},button_down:{released:0, pushed:1}},
