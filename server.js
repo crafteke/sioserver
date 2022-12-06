@@ -160,7 +160,7 @@ app.post("/send_speech", (req, res) => {
 app.post("/shutdown_control", async (req, res) => {
   console.log("Shutdowning computer and pis.",req.body);
   //wait for all pis to be off
-  await asyncAllPiCommand('sudo halt');
+  await asyncAllPiCommand('sudo shutdown');
   //kill unity
   //Taskkill.exe /IM "Face6.exe" /F
   //halt_them_all()
@@ -186,7 +186,7 @@ app.post("/restart_control", async (req, res) => {
   //halt_them_all()
   //await getlogs_rpi_service("","")
   //await exec_async(`shutdown.exe /s /f /t 0`, (error, stdout, stderr) => {
-  await exec_async(`touch /mnt/c/Users/Crafteke/SYSTEM_SHUTDOWN`, (error, stdout, stderr) => {
+  await exec_async(`touch /mnt/c/Users/Crafteke/SYSTEM_RESTART`, (error, stdout, stderr) => {
     console.log(error)
     console.log(stdout)
     console.log(stderr)
