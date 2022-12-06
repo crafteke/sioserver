@@ -6,21 +6,36 @@ $(document).ready(function () {
 $("img.img-responsive").click(function(){
   $(this).toggleClass('zoomed')
 })
-  $( "#shutdown_control" ).click(function() {
-    if (confirm("Really sure??")) {
-    $.post("/shutdown_control",
-       {
-          confirm: "false",
-       },
-       function (data, status) {
-         console.log("Shutdown system");
-         //console.log("timer started.")
-         //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
-       });
-     }else {
-       console.log("Cancel halt system.");
-     }
-   });
+$( "#shutdown_control" ).click(function() {
+  if (confirm("Really sure?? Shutdown all RPIs and computer")) {
+  $.post("/shutdown_control",
+     {
+        confirm: "false",
+     },
+     function (data, status) {
+       console.log("Shutdown system");
+       //console.log("timer started.")
+       //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
+     });
+   }else {
+     console.log("Cancel halt system.");
+   }
+ });
+ $( "#restart_control" ).click(function() {
+   if (confirm("Really sure?? Restart all RPIs and computer")) {
+   $.post("/shutdown_control",
+      {
+         confirm: "false",
+      },
+      function (data, status) {
+        console.log("Shutdown system");
+        //console.log("timer started.")
+        //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
+      });
+    }else {
+      console.log("Cancel halt system.");
+    }
+  });
 $( "#start_unity" ).click(function() {
   if (confirm("Really sure??")) {
     $.post("/start_unity",
@@ -34,6 +49,20 @@ $( "#start_unity" ).click(function() {
        });
 } else {
   console.log("Cancel unity launch.");
+}});
+$( "#stop_unity" ).click(function() {
+  if (confirm("Really sure??")) {
+    $.post("/stop_unity",
+       {
+          args: "none",
+       },
+       function (data, status) {
+         console.log("stopping unity.");
+         //console.log("timer started.")
+         //$("#logs_content").append("Command sent - "+controller_id+" : "+action_text+"</br>");
+       });
+} else {
+  console.log("Cancel unity stop.");
 }});
 //TODO: harmonize this and other buttons
 $("button.command_button").click(function(){

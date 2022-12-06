@@ -165,7 +165,28 @@ app.post("/shutdown_control", async (req, res) => {
   //Taskkill.exe /IM "Face6.exe" /F
   //halt_them_all()
   //await getlogs_rpi_service("","")
-  await exec_async(`shutdown.exe /s /f /t 0`, (error, stdout, stderr) => {
+  //await exec_async(`shutdown.exe /s /f /t 0`, (error, stdout, stderr) => {
+  await exec_async(`touch /mnt/c/Users/Crafteke/SYSTEM_SHUTDOWN`, (error, stdout, stderr) => {
+    console.log(error)
+    console.log(stdout)
+    console.log(stderr)
+  //exec(`echo "bobouboub"`, (error, stdout, stderr) => {
+      return stdout=='ok'
+    })
+   res.json([{
+      status: 'ok'
+   }])
+})
+app.post("/restart_control", async (req, res) => {
+  console.log("Restarting computer and pis.",req.body);
+  //wait for all pis to be off
+  await asyncAllPiCommand('sudo reboot');
+  //kill unity
+  //Taskkill.exe /IM "Face6.exe" /F
+  //halt_them_all()
+  //await getlogs_rpi_service("","")
+  //await exec_async(`shutdown.exe /s /f /t 0`, (error, stdout, stderr) => {
+  await exec_async(`touch /mnt/c/Users/Crafteke/SYSTEM_SHUTDOWN`, (error, stdout, stderr) => {
     console.log(error)
     console.log(stdout)
     console.log(stderr)
@@ -198,7 +219,21 @@ app.post("/start_unity", (req, res) => {
   //for linux WSL
   // /mnt/c/Users/Crafteke/Desktop/dystopia_latest/Face6.exe &
   //exec(`start C:\\Users\\Crafteke\\Desktop\\dystopia_latest\\Face6.exe`, (error, stdout, stderr) => {
-  exec("/mnt/c/Users/Crafteke/Desktop/dystopia_latest/Face6.exe &", (error, stdout, stderr) => {
+  exec("touch /mnt/c/Users/Crafteke/UNITY_START", (error, stdout, stderr) => {
+      console.log(error)
+      console.log(stdout)
+      console.log(stderr)
+    })
+   res.json([{
+      status: 'ok'
+   }])
+})
+app.post("/stop_unity", (req, res) => {
+  console.log("Stopping unity.",req.body);
+  //for linux WSL
+  // /mnt/c/Users/Crafteke/Desktop/dystopia_latest/Face6.exe &
+  //exec(`start C:\\Users\\Crafteke\\Desktop\\dystopia_latest\\Face6.exe`, (error, stdout, stderr) => {
+  exec("touch /mnt/c/Users/Crafteke/UNITY_STOP", (error, stdout, stderr) => {
       console.log(error)
       console.log(stdout)
       console.log(stderr)

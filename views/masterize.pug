@@ -28,11 +28,13 @@ html
             div(class='column')
               button(class='btn btn-success',id="start_game") Start game
             div(class='column ')
-              button(class='btn btn-error',id="stop") Stop game
-            div(class='column ')
               button(class='btn btn-error',id="shutdown_control") System shutdown
             div(class='column ')
+              button(class='btn btn-error',id="restart_control") System restart
+            div(class='column ')
               button(class='btn btn-success',id="start_unity") Start Engine
+            div(class='column ')
+              button(class='btn btn-error',id="stop_unity") Stop Engine
           div(class='column col-3 col-sm-6')
             div(class='popover popover-bottom')
                 button(class='btn btn-primary m-1') Speech
@@ -73,7 +75,7 @@ html
       div(class='container')
 
         div(class='columns')
-      
+
           div(class='column col-4 mt-1')
             img(class="img-responsive",src="http://halpi.local:8080/stream/video.mjpeg")
           div(class='column col-4 mt-1')
@@ -82,7 +84,8 @@ html
             img(class="img-responsive",src="http://lockerspi.local:8080/stream/video.mjpeg")
           div(class='column col-4 mt-1')
             img(class="img-responsive",src="http://incalpi.local:8080/stream/video.mjpeg")
-
+          div(class='column col-4 mt-1')
+            img(class="img-responsive",src="http://face6core.local:8080")
 
 
         //-
