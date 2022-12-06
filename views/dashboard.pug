@@ -17,8 +17,9 @@ html
                 h4(class="float-left")=rpi
                 span(id=rpi+'_ping' class="label float-left m-1") PING
                 span(id=rpi+'_ssh' class="label float-left m-1") SSH
-                button(class="btn float-left m-1 restartpi" data-rpi=rpi) Restart
-                button(class="btn float-left m-1 powercyclepi" data-rpi=rpi) PowerCycle
+                if(rpi!='engine')
+                  button(class="btn float-left m-1 restartpi" data-rpi=rpi) Restart
+                  button(class="btn float-left m-1 powercyclepi" data-rpi=rpi) PowerCycle
               table(class='table table-striped table-hover')
                 thead
                   th(width='30%') Service

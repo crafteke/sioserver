@@ -47,8 +47,10 @@ function refreshServicesStatus(data){
          });
          //content += "<tr class=\""+( odd_even ? "odd" : "even")+"\">"+tbl_row+"</tr>";
          //tbl_row+='<i class="icon icon-menu"></i>'
-         tbl_row+='<td><button onclick="click_getjournal(this)" class="btn btn-primary btn-action btn-lg" data-rpi-service='+k+'-'+name+'><i class="icon icon icon-more-horiz"></i></button></td>'
-         tbl_row+='<td><button onclick="click_restart(this)" class="btn" data-rpi-service='+k+'-'+name+'>Restart</button></td>'
+         if(k!='engine'){
+           tbl_row+='<td><button onclick="click_getjournal(this)" class="btn btn-primary btn-action btn-lg" data-rpi-service='+k+'-'+name+'><i class="icon icon icon-more-horiz"></i></button></td>'
+           tbl_row+='<td><button onclick="click_restart(this)" class="btn" data-rpi-service='+k+'-'+name+'>Restart</button></td>'
+         }
          tbl_row+='</tr>'
         //odd_even = !odd_even;
         $('#'+k).html(tbl_row)

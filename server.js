@@ -88,7 +88,7 @@ router.get('/masterize',function(req,res){
   //__dirname : It will resolve to your project folder.
 });
 router.get('/dashboard',function(req,res){
-  res.render('dashboard',{title:'dashboard',rpi_services: rpi_services})
+  res.render('dashboard',{title:'dashboard',rpi_services: rpis_status})
   //res.sendFile(path.join(__dirname+'/html/checkout.html'));
   //__dirname : It will resolve to your project folder.
 });
@@ -273,7 +273,7 @@ io.on('connection',  function (socket) {
   var clientIp = socket.request.connection.remoteAddress;
   const socketId = socket.id;
   var clientName='';
-  console.log('New connection from ' + clientIp + " with socket ID:"+socketId);
+  console.log(timestamp(),'New connection from ' + clientIp + " with socket ID:"+socketId);
 	socket.on('Binary', (data)=>{
     //old time when we stream tcp package to roof
 		//socket.to(clients["roof_controller"]).emit("MessageIn",data)
@@ -318,13 +318,22 @@ io.on('connection',  function (socket) {
   //     //socket.emit("beboop",json_message);
   // });
   socket.on("Register", (data) => {
-		  console.log("Registration received:"+data);
+		  console.log(timestamp(),"Registration received:"+data);
       clients[data.toLowerCase()]=socketId;
       clientName=data.toLowerCase();
 	});
+  // socket.conn.on('packet', function (packet) {
+  //   console.log('packeeet',clientName,'type',packet.type)
+  //   if (packet.type === 'pong') console.log('received ping');
+  // });
+  //
+  // socket.conn.on('packetCreate', function (packet) {
+  //   if (packet.type === 'pong') console.log('sending pong');
+  // });
   socket.on("disconnect", (reason) => {
-    console.log("Client disconnected:",clientName, ' reason:',reason)
+    console.log(timestamp(),"Client disconnected:",clientName, ' reason:',reason)
     clients[clientName]=false;
+    restart_rpi_service(clientName,'controller')
   });
   // socket.once('disconnect', function () {
   //
@@ -352,10 +361,11 @@ async function check_clients(){
 })*/
 }
 //setInterval(check_clients,1000);
-
+rpis_status['engine']={'ping':true,'ssh':true} //engine is not a pi but fuck you i want to play beatsaber
 Object.entries(rpi_services).forEach(([rpi,services])=>
 {
     rpis_status[rpi]={'ping':false,'ssh':false}
+
 })
 
 function check_ping(rpi){
@@ -380,8 +390,8 @@ function checkup(){
   });
   Object.entries(rpi_services).forEach(([rpi,services])=>
   {
+      rpis_status[rpi]["services"]=[]
       if(rpis_status[rpi]['ssh']){
-        rpis_status[rpi]["services"]=[]
         services.forEach(service=>{
           //maybe add -i ~/.ssh/face6 or id_rsa
           var statuses_json={}
@@ -424,6 +434,8 @@ function checkup(){
             })
           }
     })
+    rpis_status['engine']["services"]=[]
+    rpis_status['engine']["services"].push({name:'engine',status:'Ready',notify:'',sio_status:clients['engine'] ? 'UP' : 'DOWN'})
 }
 function generate_debug_data(){
   Object.entries(rpi_services).forEach(([rpi,services])=>
