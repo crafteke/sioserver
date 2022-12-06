@@ -160,7 +160,7 @@ app.post("/send_speech", (req, res) => {
 app.post("/shutdown_control", async (req, res) => {
   console.log("Shutdowning computer and pis.",req.body);
   //wait for all pis to be off
-  await asyncAllPiCommand('sudo shutdown');
+  //await asyncAllPiCommand('sudo shutdown');
   //kill unity
   //Taskkill.exe /IM "Face6.exe" /F
   //halt_them_all()
@@ -180,7 +180,7 @@ app.post("/shutdown_control", async (req, res) => {
 app.post("/restart_control", async (req, res) => {
   console.log("Restarting computer and pis.",req.body);
   //wait for all pis to be off
-  await asyncAllPiCommand('sudo reboot');
+  //await asyncAllPiCommand('sudo reboot');
   //kill unity
   //Taskkill.exe /IM "Face6.exe" /F
   //halt_them_all()

@@ -13,11 +13,11 @@
 }
 .zoomed{
   position:fixed;
-  top: 26%;
-  left: 18%;
+  top: 8%;
+  left: 11%;
   width: 1280px;
   height:720px;
-  
+
 }
 /* .commands_ux{
   position: sticky;

@@ -15,12 +15,14 @@ while($true){
   if(Test-Path C:\Users\Crafteke\SYSTEM_SHUTDOWN -PathType Leaf){
     echo "Shutdown computer"
     Remove-Item C:\Users\Crafteke\SYSTEM_SHUTDOWN
-    shutdown /t 0
+    Stop-Computer
+    #Start-Process shutdown.exe -ArgumentList "/s /t /f 0"
   }
   if(Test-Path C:\Users\Crafteke\SYSTEM_RESTART -PathType Leaf){
     echo "Restart computer"
     Remove-Item C:\Users\Crafteke\SYSTEM_RESTART
-    shutdown /r /t 0
+    Restart-Computer
+    #Start-Process shutdown.exe -ArgumentList "/s /r /f /t 0"
   }
   echo "Monitoring commands..."
   Start-Sleep -Seconds 5

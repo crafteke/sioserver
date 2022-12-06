@@ -23,7 +23,7 @@ $( "#shutdown_control" ).click(function() {
  });
  $( "#restart_control" ).click(function() {
    if (confirm("Really sure?? Restart all RPIs and computer")) {
-   $.post("/shutdown_control",
+   $.post("/restart_control",
       {
          confirm: "false",
       },
