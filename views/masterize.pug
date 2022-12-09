@@ -72,10 +72,13 @@ html
                                 td=command
                                 td
                                   button(class='btn btn-primary command_button' data-controller_id=command, value=1) Activate
+          div(class='column col-3 col-sm-6')
+              img(class="hatizer",src='01.png',onclick="$('.img-responsive').css( 'cursor', 'url(01.png), auto' );")
+              img(class="hatizer",src='02.png',onclick="$('.img-responsive').css( 'cursor', 'url(02.png), auto' );")
+              img(class="hatizer",src='03.png',onclick="$('.img-responsive').css( 'cursor', 'url(03.png), auto' );")
+              span(style="font-size:32px",onclick="$('.img-responsive').css( 'cursor', 'auto' );") &#128433;
       div(class='container')
-
         div(class='columns')
-
           div(class='column col-4 mt-1')
             img(class="img-responsive",src="http://halpi.local:8080/stream/video.mjpeg")
           div(class='column col-4 mt-1')

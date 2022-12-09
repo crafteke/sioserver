@@ -1,9 +1,10 @@
 
-const
-    io = require("socket.io-client"),
-    ioClient = io.connect("http://face6core.local:4567");
-    readline = require('readline');
+const readline = require('readline');
 
+const io=require("socket.io-client");
+
+const URL = "ws://face6core.local:4567";
+const socket = io.connect(URL, { autoConnect: true });
 
 //ioClient.onAny(function(event,data) {console.log(data)});
 
@@ -25,12 +26,29 @@ const rl = readline.createInterface({
 
 
 
+// ioClient.on('connection',function(){
+//   console.log('bou')
+// })
+// ioClient.on("connection", (socket) => {
+//   console.log('connected!')
+//   socket.data.username = "alice";
+// });
+// ioClient = io.connect("http://");
+//
+// rl.on('close', function () {
+//   console.log('\nBYE BYE !!!');
+//   process.exit(0);
+// });
 
-rl.on('close', function () {
-  console.log('\nBYE BYE !!!');
-  process.exit(0);
+socket.on("connect", () => {
+  console.log('connected!')
+  //socket.data.name="mr biere" not working
+
 });
 
+socket.on("disconnect", () => {
+  console.log('disconnected!')
+});
 
 rl.question('controller_id:', function (c_id) {
     rl.question('Value:', function (c_value) {

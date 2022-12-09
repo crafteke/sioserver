@@ -72,6 +72,8 @@ app.use(express.json());
 
 app.use(express.static('css'));
 app.use(express.static('js'));
+app.use(express.static('img'));
+
 app.set('view engine', 'pug');
 
 router.get('/v1',function(req,res){

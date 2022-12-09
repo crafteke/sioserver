@@ -6,7 +6,17 @@
   height: 360px;
   margin: 0 auto;
 }
+body {
 
+}
+.img-responsive{
+  /* cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:36px;'><text y='50%'>✡</text></svg>") 16 0,auto; /*!emojicursor.app*/ */
+  /* cursor: url("01.png"), auto; */
+}
+img.hatizer{
+  width:64px;
+  height:64px
+}
 .zoom:hover {
   transform: scale(2); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
   z-index: -1;
