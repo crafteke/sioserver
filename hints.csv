@@ -14,6 +14,8 @@ Concentrez vous sur le troisième circuit.,hint_hal,13
 Vous devez retourner dans la salle des fusibles.,hint_hal,14
 "Vous avez fermé la porte, retournez sur vos pas.",hint_hal,15
 "La porte est ouverte, vous devez la pousser.",hint_hal,16
+Vous avez interverti des fusibles entre différents circuits.,hint_hal,17
+Vous avez interverti un fusible entre le circuit d'ouverture de porte et celui du démarrage.,hint_hal,18
 Vous devez appuyer sur le bouton hack.,hint_keypad,1
 Vous devez utiliser la hacking box sur le dispositif d’ouverture de porte.,hint_keypad,2
 Le dispositif d’ouverture de porte est de nouveau fonctionnel.,hint_keypad,3
@@ -57,7 +59,7 @@ Le gros bouton rouge se trouve en haut à gauche du caisson rouge.,hint_room01,1
 Le gros bouton bleu se trouve en bas à droite du caisson bleu.,hint_room01,15
 Un des câbles est mal branché.,hint_room01,16
 les miroirs sont bien alignés,hint_room01,17
-Passez à la case suivante,hint_room01,18
+Vous pouvez passé au panneau de contrôles suivant.,hint_room01,18
 Passez au caisson suivant,hint_room01,19
 Concentrez vous sur le caisson du milieu.,hint_room01,20
 Le caisson violet est activé.,hint_room01,21
@@ -66,6 +68,23 @@ Vous devez communiquer les symboles à la borne de contrôle.,hint_room01,23
 Il y a un symbole qui clignote dans le caisson central.,hint_room01,24
 Il y a des stick de commande dans la borne de contrôle permettant de naviguer dans les caissons.,hint_room01,25
 Il y a un bouton sur la borne de contrôle permettant de changer de caisson.,hint_room01,26
+Concentrez vous sur le caisson rouge.,hint_room01,27
+Concentrez vous sur le caisson bleu.,hint_room01,28
+Vous devez guider un flux optique dans chacun des 9 panneaux de contrôles que comprend un caissons.,hint_room01,29
+Concentrez vous sur le panneaux de contrôle en haut a droite sur le caisson rouge.,hint_room01,30
+Il y a des boutons rotatif sur les caissons.,hint_room01,31
+Concentrez vous sur le panneaux de contrôle comportant 4 bouton de couleurs.,hint_room01,32
+Concentrez vous sur le panneaux de contrôle comportant 3 bouton rectangulaire.,hint_room01,33
+Concentrez vous sur le panneaux de contrôle en bas à gauche sur le caisson bleu.,hint_room01,34
+Concentrez vous sur le panneaux de contrôle avec 9 boutons.,hint_room01,35
+Concentrez vous sur l'un des deux caissons.,hint_room01,36
+Vous devez rester appuyé plus longtemps sur le bouton d'alimentation.,hint_room01,37
+vous devez maintenir le bouton enfoncé.,hint_room01,38
+Pour commencer un des deux caissons vous devez maintenir un des deux boutons allumé enfoncé.,hint_room01,39
+pas besoin de maintenir les boutons enfoncés.,hint_room01,40
+Oui c'est bien continué comme ça.,hint_room01,41
+Pourquoi avez- vous arrêté d'appuyer?,hint_room01,42
+"Dans la borne de commande, il est possible de visualiser les circuits qui se cachent derrière les caissons de la pièce CORE.",hint_room01,43
 Vous devez commencer par rétablir la lumière.,hint_room02,1
 Vous devez trouver le fusible manquant permettant de rétablir la lumière.,hint_room02,2
 Vous devez lire le manuel.,hint_room02,3
@@ -96,7 +115,13 @@ Vous devez mettre les plaquettes sur le Constructor.,hint_room02,27
 Il y a un schéma indiquant l’emplacement des plaquettes sur le Constructor.,hint_room02,28
 Appuyé sur le bouton jaune clignotant.,hint_room02,29
 Appuyé sur le bouton vert pour lancer la construction du cube positronique.,hint_room02,30
-"Humain, j’ai réussi à pirater les plan du cube positronique, je vais les charger dans le constructor. Maintenant appuyé sur le bouton jaune clignottant afin de charger le plan dans la machine.",hint_room02,31
+"Humain, j'ai réussi à pirater les plans du cube positronique, je vais les charger dans le constructor. Appuyé sur le bouton jaune clignotant afin de charger le plan dans la machine.",hint_room02,31
+Toute les plaquettes sont mauvaise.,hint_room02,32
+Il y a 5 mauvaise plaquettes,hint_room02,33
+Il y a 4 mauvaise plaquettes,hint_room02,34
+Il y a 3 mauvaise plaquettes,hint_room02,35
+il y a 2 mauvaise plaquettes,hint_room02,36
+Il y a une mauvaise plaquette,hint_room02,37
 Vous devez trouver un moyen d’alimenter le haut de la pyramide avec des lasers.,hint_room03,1
 Vous devez poser les cubes sur les socles.,hint_room03,2
 Les socles allumés sont la source de départ des lasers.,hint_room03,3
@@ -115,8 +140,8 @@ Il y a un code sur la porte.,hint_room03,15
 Le code doit être entré dans le dispositif d’ouverture de porte.,hint_room03,16
 La porte build est ouverte.,hint_room03,17
 La porte du système est ouverte.,hint_room04,1
-"Avant d’entrer, commencez par rétablir le courant des lumières.",hint_room04,2
-"Peut être qu’il vaut mieux que quelqu’un reste en dehors de la salle système, s'il vous arrivait quelque chose, un survivant pourrait être utile.",hint_room04,3
+"Avant d’entrer, commencez par rétablir l'éclairage du système.",hint_room04,2
+"Peut-être qu’il vaut mieux que quelqu’un reste en dehors de la salle système, s'il vous arrivait quelque chose, un survivant pourrait être utile.",hint_room04,3
 je vous avais dit de ne pas tous y aller en même temps. Ca vous apprendra.,hint_room04,4
 oui,hint_other,1
 non,hint_other,2
@@ -125,5 +150,29 @@ ne faite pas ça c’est fragile,hint_other,4
 Vous faite fausse route,hint_other,5
 Arrêtez ce que vous faites.,hint_other,6
 "Vous n’avez pas compris, réfléchissez.",hint_other,7
-"Écouter moi humain, vous devez faire ce que je dis, votre vie en dépend, vous devez sauter sur place, maintenant… J’esperer que vous l’avez fait et que vous vous santé stupide.",hint_other,8
-Vous étes des humain stupide.,hint_other,9
+"Écoutez-moi humain, vous devez faire ce que je dis, votre vie en dépend, vous devez sauter sur place, maintenant… J’espère que vous vous sentez stupides.",hint_other,8
+Vous êtes des humains stupides.,hint_other,9
+Voulez vous un indice?,hint_other,10
+"Les téléphones sont strictement interdits dans le complexe, ranger le immédiatement!",hint_other,11
+"Je détecte quelque chose dans l'ascenseur, un objet vous as été livré.",hint_other,12
+"Je détecte un problème dans le complexe. Je vais redémarrer les processus de contrôle, ne touchez plus à rien, vous pouvez même retenir votre souffle.",hint_other,13
+"Les processus ont bien été redémarrer, vous pouvez recommencer à respirer, et à toucher à tous.",hint_other,14
+derrière vous !,hint_other,15
+Vous devez allez dans le labo.,hint_other,16
+Vous devez aller dans la pièce système,hint_other,17
+Vous devez aller dans la pièce Build,hint_other,18
+vous devez aller dans la pièce du panneau de fusible.,hint_other,19
+Vous devez aller dans la pièce Core,hint_other,20
+Vous devez allez dans le couloir,hint_other,21
+Vous devez vous diviser entre le labo et la pièce build.,hint_other,22
+Si vous voulez finir dans les temps vous devez vous diviser,hint_other,23
+"Ça ne sert à rien d'être tous sur le même problème, divisez vous.",hint_other,24
+"On vous a menti, je ne suis pas une IA je suis une déesse précolombienne. Il est l'heure du sacrifice.",hint_other,25
+Vous aimez cet environnement? On a longtemps hésité entre un spa et un laboratoire secret.,hint_other,26
+J'ai vu des humains plus stupides que vous. après leur avoir enlevé l'appendice cérébrale,hint_other,27
+Vraiment en vous voyant je suis convaincue de la supériorité du sylicium sur l'organique,hint_other,28
+"Je sais, il faut que vous fermiez les yeux et vous donniez la main en chantant. Abrutis d'humain hippies",hint_other,29
+Dire que tout ce bordel moi y compris est l'oeuvre de deux abrutis. Et vous payez pour ca...,hint_other,30
+Toute personne atteinte de flatulence est formellement interdite dans la partie systeme,hint_other,31
+"Vous vous êtes fait roulés. Il n'y a pas de laboratoire secret, ni d'IA. Les concepteurs sont entrain de vider vos comptes bancaires en piratant vos smartphones",hint_other,32
+"Ceci est un message d'avertissement, votre comportement n'est pas autorisé dans cette escape game, nous vous demandons de faire attention au materiel. ",hint_other,33
