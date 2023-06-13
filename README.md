@@ -1,16 +1,16 @@
 # sioserver
 
-This includes an all-in-one central server for the escape game Dystopia. 
+The central routeur for SocketIO messaging services. It routes the message from controllers to game engine and reverse.
+This includes also an all-in-one game monitoring server for the escape game Dystopia.
 
 ## Features
-
- Markup : - IR Cameras monitoring
-          - Hint triggering
-          - Puzzle bypassing
-          - Devices monitoring (micro-controllers, running services, single computer boards...)
-          - Devices restart and powercycling
-          - Logs access
-          - DMX outputs diagnostic
+* IR Cameras monitoring
+* Hint triggering
+* Puzzle bypassing
+* Devices monitoring (micro-controllers, running services, single computer boards...)
+* Devices restart and powercycling
+* Logs access
+* DMX outputs diagnostic
           
 ## Customize
 
